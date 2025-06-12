@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { styled, ThemeProvider, createTheme } from "@mui/material/styles";
 import { Box, Typography, IconButton, Button } from "@mui/material";
 import { Menu as MenuIcon, Person as PersonIcon } from "@mui/icons-material";
-import { useNavigate, Outlet } from "react-router-dom";
 import SidebarMenu from "./pages/SidebarMenu/SidebarMenu";
 import logoHorizontal from "./assets/png/LogoHorizontal.png";
 import logo from "./assets/png/Logo1.png";
+import ReservationTabs from "./pages/Programacion/Preadmision/ReservationTabs";
 
 const theme = createTheme();
 
@@ -64,13 +64,12 @@ const MainContainer = styled("div")(({ theme }) => ({
 const MainContent = styled("main")(({ theme }) => ({
   flex: 1,
   padding: theme.spacing(3),
-  backgroundColor: "#fff", // Asegura fondo blanco
+  backgroundColor: "#fff",
   borderRadius: "20px",
   margin: theme.spacing(2),
   width: "calc(100% - 40px)",
   height: "calc(100% - 40px)",
   overflowY: "auto",
-  border: "2px solid blue", // Depuración
 }));
 
 const UserProfile = styled("div")(({ theme }) => ({
@@ -85,7 +84,6 @@ const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState("dashboard");
   const [isSmallLogo, setIsSmallLogo] = useState(false);
   const sidebarListRef = useRef<HTMLDivElement | null>(null);
-  const navigate = useNavigate();
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -93,14 +91,14 @@ const App: React.FC = () => {
 
   const handlePageSelect = (page: string) => {
     setSelectedPage(page);
-    navigate(`/${page.toLowerCase().replace(/\s+/g, '-')}`);
     if (window.innerWidth < 900) {
       setSidebarOpen(false);
     }
   };
 
   const handleLogout = () => {
-    navigate('/login');
+    // Lógica de logout sin navegación (puedes implementar redirección manual si es necesario)
+    console.log("Logout clicked");
   };
 
   useEffect(() => {
@@ -122,6 +120,16 @@ const App: React.FC = () => {
       }
     };
   }, []);
+
+  // Renderizado dinámico basado en selectedPage
+  const renderContent = () => {
+    switch (selectedPage) {
+      case "PREADMISION":
+        return <ReservationTabs />;
+      default:
+        return <Typography>Selecciona una opción del menú</Typography>; // Placeholder por defecto
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -168,7 +176,7 @@ const App: React.FC = () => {
               sidebarListRef={sidebarListRef}
             />
             <MainContent>
-              <Outlet />
+              {renderContent()}
             </MainContent>
           </MainContainer>
         </Box>

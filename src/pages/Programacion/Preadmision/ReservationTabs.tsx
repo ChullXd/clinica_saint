@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Box, Tabs, Tab, Paper } from "@mui/material";
-import ExternalConsultation from "./ExternalConsultation";
-import "./ConsultaExternaPage.css"; // Ajusta la ruta según tu estructura
 import CirugíaPreadmision from "./CirugíaPreadmision";
+import ExternalConsultation from "./ExternalConsultation";
+import "./ConsultaExternaPage.css";
 
 const ReservationTabs = () => {
   const [value, setValue] = useState(0);
@@ -24,7 +24,7 @@ const ReservationTabs = () => {
           mx: "auto",
         }}
       >
-        <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}> {/* Mover pestañas más arriba */}
+        <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -32,12 +32,12 @@ const ReservationTabs = () => {
             sx={{
               "& .MuiTab-root": {
                 fontWeight: 800,
-                fontSize: { xs: "1.2rem", sm: "1.5rem" }, // Misma fuente que los títulos
+                fontSize: { xs: "1.2rem", sm: "1.5rem" },
                 color: "#1A3C6D",
-                textTransform: "none", // Evitar mayúsculas automáticas
+                textTransform: "none",
               },
               "& .Mui-selected": {
-                color: "#4A90E2", // Color seleccionado
+                color: "#4A90E2",
               },
             }}
           >

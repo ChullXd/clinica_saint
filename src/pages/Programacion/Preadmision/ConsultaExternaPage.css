@@ -6,8 +6,8 @@
   background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
   padding: 20px;
   box-sizing: border-box;
-  min-height: 100vh;
-  overflow-y: auto;
+  min-height: 100vh; /* Mantiene la altura mínima, pero permite crecer */
+  overflow-y: hidden; /* Elimina el scroll vertical global */
 }
 
 .reservation-container {
@@ -63,7 +63,7 @@
 }
 
 .reservation-input .MuiInputLabel-root {
-  font-size: "0.9rem";
+  font-size: 0.9rem;
   color: #1A3C6D;
 }
 

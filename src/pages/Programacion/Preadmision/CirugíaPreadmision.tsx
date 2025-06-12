@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -13,8 +13,9 @@ import {
   Divider,
   Checkbox,
   FormControlLabel,
+  IconButton,
 } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import {
   Event as EventIcon,
   AccessTime as TimeIcon,
@@ -25,8 +26,10 @@ import {
   Schedule as ScheduleIcon,
   CheckCircle as ConfirmIcon,
   Cancel as CancelIcon,
-  Search as SearchIcon,
+  Add as AddIcon,
+  Close as CloseIcon,
 } from "@mui/icons-material";
+import RegistroModal from "./RegistroModal"; // Importamos el modal
 import "./ConsultaExternaPage.css";
 
 const CirugíaPreadmision: React.FC = () => {
@@ -52,6 +55,20 @@ const CirugíaPreadmision: React.FC = () => {
       width: 300,
       editable: true,
     },
+    {
+      field: "actions",
+      headerName: "Acciones",
+      width: 100,
+      renderCell: (params: GridRenderCellParams) => (
+        <IconButton
+          color="error"
+          onClick={() => handleDeleteRow(params.row.id)}
+          size="small"
+        >
+          <CloseIcon />
+        </IconButton>
+      ),
+    },
   ]);
   const [rows, setRows] = useState([
     {
@@ -73,6 +90,55 @@ const CirugíaPreadmision: React.FC = () => {
       detalleProcedimiento: "",
     };
     setRows([...rows, newRow]);
+  };
+
+  const handleDeleteRow = (id: number) => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  // Estados para las horas de inicio y fin
+  const [inicioCirugia, setInicioCirugia] = useState("");
+  const [finCirugia, setFinCirugia] = useState("");
+  const [duracionEstimada, setDuracionEstimada] = useState("");
+
+  // Calcular duración cuando cambien inicio o fin
+  useEffect(() => {
+    if (inicioCirugia && finCirugia) {
+      const start = new Date(`1970-01-01T${inicioCirugia}:00`);
+      const end = new Date(`1970-01-01T${finCirugia}:00`);
+      if (end > start) {
+        const diffMs = end.getTime() - start.getTime();
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        setDuracionEstimada(diffHours.toString());
+      } else {
+        setDuracionEstimada(""); // Reinicia si las horas no son válidas
+      }
+    } else {
+      setDuracionEstimada("");
+    }
+  }, [inicioCirugia, finCirugia]);
+
+  // Estados para el modal
+  const [openModal, setOpenModal] = useState(false);
+  const [modalType, setModalType] = useState<"paciente" | "medico" | null>(null);
+
+  const handleOpenModal = (type: "paciente" | "medico") => {
+    setModalType(type);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleSaveModal = (data: { noIdentificacion: string; nombre: string; telefono: string; correo: string }) => {
+    if (modalType === "paciente") {
+      // Lógica para actualizar datos del paciente
+      console.log("Paciente guardado:", data);
+    } else if (modalType === "medico") {
+      // Lógica para actualizar datos del médico
+      console.log("Médico guardado:", data);
+    }
   };
 
   return (
@@ -110,22 +176,23 @@ const CirugíaPreadmision: React.FC = () => {
         />
         <Grid container spacing={3} className="reservation-grid">
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              label="Número Reserva"
-              variant="outlined"
-              className="reservation-input"
-              InputProps={{
-                startAdornment: (
-                  <DescriptionIcon sx={{ color: "#4A90E2", mr: 1 }} />
-                ),
-                endAdornment: <SearchIcon sx={{ color: "#4A90E2" }} />,
-              }}
-              sx={{
-                bgcolor: "#F7FAFF",
-                "& .MuiInputBase-root": { height: "40px" },
-              }}
-            />
+            <Box display="flex" alignItems="center">
+              <TextField
+                fullWidth
+                label="Número Reserva"
+                variant="outlined"
+                className="reservation-input"
+                InputProps={{
+                  startAdornment: (
+                    <DescriptionIcon sx={{ color: "#4A90E2", mr: 1 }} />
+                  ),
+                }}
+                sx={{
+                  bgcolor: "#F7FAFF",
+                  "& .MuiInputBase-root": { height: "40px" },
+                }}
+              />
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
@@ -161,23 +228,6 @@ const CirugíaPreadmision: React.FC = () => {
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              label="Hora de Cirugía"
-              type="time"
-              InputLabelProps={{ shrink: true }}
-              variant="outlined"
-              className="reservation-input"
-              InputProps={{
-                startAdornment: <TimeIcon sx={{ color: "#4A90E2", mr: 1 }} />,
-              }}
-              sx={{
-                bgcolor: "#F7FAFF",
-                "& .MuiInputBase-root": { height: "40px" },
-              }}
-            />
-          </Grid>
         </Grid>
 
         {/* Sección 2: Información del Paciente */}
@@ -187,20 +237,29 @@ const CirugíaPreadmision: React.FC = () => {
         />
         <Grid container spacing={3} className="reservation-grid">
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              label="No. Identificación"
-              variant="outlined"
-              className="reservation-input"
-              InputProps={{
-                startAdornment: <PersonIcon sx={{ color: "#4A90E2", mr: 1 }} />,
-                endAdornment: <SearchIcon sx={{ color: "#4A90E2" }} />,
-              }}
-              sx={{
-                bgcolor: "#F7FAFF",
-                "& .MuiInputBase-root": { height: "40px" },
-              }}
-            />
+            <Box display="flex" alignItems="center">
+              <TextField
+                fullWidth
+                label="No. Identificación"
+                variant="outlined"
+                className="reservation-input"
+                InputProps={{
+                  startAdornment: <PersonIcon sx={{ color: "#4A90E2", mr: 1 }} />,
+                }}
+                sx={{
+                  bgcolor: "#F7FAFF",
+                  "& .MuiInputBase-root": { height: "40px" },
+                }}
+              />
+              <IconButton
+                color="primary"
+                size="small"
+                sx={{ ml: 1, height: "40px", width: "40px" }}
+                onClick={() => handleOpenModal("paciente")}
+              >
+                <AddIcon />
+              </IconButton>
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
@@ -256,22 +315,31 @@ const CirugíaPreadmision: React.FC = () => {
         />
         <Grid container spacing={3} className="reservation-grid">
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              label="No. Identificación"
-              variant="outlined"
-              className="reservation-input"
-              InputProps={{
-                startAdornment: (
-                  <MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />
-                ),
-                endAdornment: <SearchIcon sx={{ color: "#4A90E2" }} />,
-              }}
-              sx={{
-                bgcolor: "#F7FAFF",
-                "& .MuiInputBase-root": { height: "40px" },
-              }}
-            />
+            <Box display="flex" alignItems="center">
+              <TextField
+                fullWidth
+                label="No. Identificación"
+                variant="outlined"
+                className="reservation-input"
+                InputProps={{
+                  startAdornment: (
+                    <MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />
+                  ),
+                }}
+                sx={{
+                  bgcolor: "#F7FAFF",
+                  "& .MuiInputBase-root": { height: "40px" },
+                }}
+              />
+              <IconButton
+                color="primary"
+                size="small"
+                sx={{ ml: 1, height: "40px", width: "40px" }}
+                onClick={() => handleOpenModal("medico")}
+              >
+                <AddIcon />
+              </IconButton>
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
@@ -397,8 +465,8 @@ const CirugíaPreadmision: React.FC = () => {
               fullWidth
               label="Observaciones"
               multiline
-              minRows={4} /* Reducido de 8 a 4 */
-              maxRows={10} /* Reducido de 20 a 10 */
+              minRows={4}
+              maxRows={10}
               variant="outlined"
               className="reservation-input observation-input"
               InputProps={{
@@ -411,17 +479,20 @@ const CirugíaPreadmision: React.FC = () => {
                 mt: 2,
                 width: "100%",
                 height: 200,
-              }} /* Altura reducida a 200px */
+              }}
             />
           </Grid>
-           <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4}>
             <Box display="flex" flexDirection="column" gap={3}>
               <TextField
                 fullWidth
-                label="Duración Estimada (horas)"
-                type="number"
+                label="Inicio de Cirugía"
+                type="time"
+                InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 className="reservation-input"
+                value={inicioCirugia}
+                onChange={(e) => setInicioCirugia(e.target.value)}
                 InputProps={{
                   startAdornment: <TimeIcon sx={{ color: "#4A90E2", mr: 1 }} />,
                 }}
@@ -430,11 +501,40 @@ const CirugíaPreadmision: React.FC = () => {
                   "& .MuiInputBase-root": { height: "40px" },
                 }}
               />
-              <FormControl
+              <TextField
                 fullWidth
+                label="Fin de Cirugía"
+                type="time"
+                InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 className="reservation-input"
-              >
+                value={finCirugia}
+                onChange={(e) => setFinCirugia(e.target.value)}
+                InputProps={{
+                  startAdornment: <TimeIcon sx={{ color: "#4A90E2", mr: 1 }} />,
+                }}
+                sx={{
+                  bgcolor: "#F7FAFF",
+                  "& .MuiInputBase-root": { height: "40px" },
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Duración Estimada (horas)"
+                type="number"
+                variant="outlined"
+                className="reservation-input"
+                value={duracionEstimada}
+                InputProps={{
+                  startAdornment: <TimeIcon sx={{ color: "#4A90E2", mr: 1 }} />,
+                  readOnly: true,
+                }}
+                sx={{
+                  bgcolor: "#F7FAFF",
+                  "& .MuiInputBase-root": { height: "40px" },
+                }}
+              />
+              <FormControl fullWidth variant="outlined" className="reservation-input">
                 <InputLabel sx={{ fontSize: "0.9rem" }}>Quirófano</InputLabel>
                 <Select
                   label="Quirófano"
@@ -445,55 +545,31 @@ const CirugíaPreadmision: React.FC = () => {
                   <MenuItem value="Q3">Quirófano 3</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl
-                fullWidth
-                variant="outlined"
-                className="reservation-input"
-              >
-                <InputLabel sx={{ fontSize: "0.9rem" }}>
-                  Horario Disponible
-                </InputLabel>
+              <FormControl fullWidth variant="outlined" className="reservation-input">
+                <InputLabel sx={{ fontSize: "0.9rem" }}>Horario Disponible</InputLabel>
                 <Select
                   label="Horario Disponible"
-                  startAdornment={
-                    <ScheduleIcon sx={{ color: "#4A90E2", mr: 1 }} />
-                  }
+                  startAdornment={<ScheduleIcon sx={{ color: "#4A90E2", mr: 1 }} />}
                 >
                   <MenuItem value="mañana">Mañana (08:00 - 12:00)</MenuItem>
                   <MenuItem value="tarde">Tarde (13:00 - 17:00)</MenuItem>
                   <MenuItem value="noche">Noche (18:00 - 22:00)</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl
-                fullWidth
-                variant="outlined"
-                className="reservation-input"
-              >
-                <InputLabel sx={{ fontSize: "0.9rem" }}>
-                  Tipo Atención
-                </InputLabel>
+              <FormControl fullWidth variant="outlined" className="reservation-input">
+                <InputLabel sx={{ fontSize: "0.9rem" }}>Tipo Atención</InputLabel>
                 <Select
                   label="Tipo Atención"
-                  startAdornment={
-                    <MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />
-                  }
+                  startAdornment={<MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />}
                 >
                   <MenuItem value="mañana">Hospitalario</MenuItem>
                   <MenuItem value="tarde">Ambulatorio</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl
-                fullWidth
-                variant="outlined"
-                className="reservation-input"
-              >
-                <InputLabel sx={{ fontSize: "0.9rem" }}>
-                  Tipo de Habitación
-                </InputLabel>
+              <FormControl fullWidth variant="outlined" className="reservation-input">
+                <InputLabel sx={{ fontSize: "0.9rem" }}>Tipo de Habitación</InputLabel>
                 <Select
                   label="Tipo de Habitación"
-                  // value={tipoHabitacion}
-                  // onChange={(e) => setTipoHabitacion(e.target.value as string)}
                   startAdornment={<RoomIcon sx={{ color: "#4A90E2", mr: 1 }} />}
                 >
                   <MenuItem value="Privada">Privada</MenuItem>
@@ -540,6 +616,14 @@ const CirugíaPreadmision: React.FC = () => {
           </Button>
         </Box>
       </Paper>
+
+      {/* Modal para Registro */}
+      <RegistroModal
+        open={openModal}
+        type={modalType}
+        onClose={handleCloseModal}
+        onSave={handleSaveModal}
+      />
     </Box>
   );
 };
