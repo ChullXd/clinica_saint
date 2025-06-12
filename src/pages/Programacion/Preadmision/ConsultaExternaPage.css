@@ -1,0 +1,97 @@
+.root-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  padding: 20px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.reservation-container {
+  padding: 40px;
+  width: 100%;
+  max-width: 1600px;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-title {
+  margin-bottom: 30px;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1A3C6D;
+}
+
+.reservation-grid {
+  margin-bottom: 25px;
+}
+
+.reservation-input {
+  margin-bottom: 20px;
+}
+
+.reservation-input .MuiInputBase-root {
+  font-size: 0.9rem;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+/* Hacer los campos más largos que anchos */
+.reservation-input .MuiInputBase-root:not(.MuiInputBase-multiline) {
+  height: 40px;
+}
+
+/* Estilo específico para el campo de Observaciones */
+.observation-input .MuiInputBase-root {
+  min-height: 200px; /* Reducido de 400px a 200px */
+  resize: vertical;
+  margin-top: 0px; /* Ajustado para alinear con el borde superior del Divider */
+  margin-bottom: 20px; /* Margen inferior mantenido */
+}
+
+/* Asegurar que los Select también sean más largos que anchos */
+.reservation-input .MuiSelect-select {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.reservation-input .MuiInputLabel-root {
+  font-size: "0.9rem";
+  color: #1A3C6D;
+}
+
+.reservation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.section-title-container {
+  margin-bottom: 40px;
+}
+
+.reservation-table {
+  width: 100%;
+  border: 1px solid #B6D7ED;
+  border-radius: 4px;
+}
+
+.reservation-table th,
+.reservation-table td {
+  padding: 8px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.reservation-table th {
+  background-color: #E3F2FD;
+  font-weight: bold;
+}

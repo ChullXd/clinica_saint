@@ -1,0 +1,252 @@
+/* Estilos base para el login */
+.login-container {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #1A3C6D;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.login-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 80%;
+  max-width: 1200px;
+  height: 80vh;
+  border: 2px solid #B6D7ED;
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.login-illustration {
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 2px solid #B6D7ED;
+}
+
+.login-illustration img {
+  max-width: 70%;
+  max-height: 70%;
+  width: auto;
+  height: auto;
+  border-radius: 8px 0 0 8px;
+  object-fit: contain;
+}
+
+.login-illustration .transition-image {
+  animation: fadeTransition 5s infinite;
+}
+
+@keyframes fadeTransition {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.login-form {
+  background-color: #14649e;
+  color: #1A3C6D;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.login-form img {
+  max-width: 50%;
+  max-height: 50%;
+  width: auto;
+  height: auto;
+  margin-bottom: 1rem;
+  object-fit: contain;
+}
+
+.login-form h1 {
+  font-size: 2.5em;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: #1A3C6D;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.6em;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #B6D7ED;
+  background-color: #FFFFFF;
+  color: #1A3C6D;
+  font-size: 1em;
+  font-family: inherit;
+  transition: border-color 0.25s;
+}
+
+.login-form input:focus {
+  border-color: #1A3C6D;
+  outline: none;
+}
+
+.login-form .password-strength {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.login-form .password-strength span {
+  font-size: 0.8em;
+  color: #B6D7ED;
+}
+
+.login-form .password-strength div {
+  width: 100px;
+  height: 5px;
+  background-color: #B6D7ED;
+  margin: 4px auto;
+  border-radius: 2px;
+}
+
+.login-form button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.login-form .sign-in-btn {
+  background-color: #1A3C6D;
+  color: #FFFFFF;
+}
+
+.login-form .sign-in-btn:hover {
+  border-color: #B6D7ED;
+  background-color: #2E4A9C;
+}
+
+.login-form .create-account-btn {
+  background-color: #B6D7ED;
+  color: #1A3C6D;
+}
+
+.login-form .create-account-btn:hover {
+  background-color: #BBDEFB;
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+  .login-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+    width: 90%;
+    border-radius: 8px;
+  }
+
+  .login-illustration img {
+    border-radius: 8px 8px 0 0;
+    max-width: 60%;
+    max-height: 60%;
+  }
+
+  .login-form {
+    border-radius: 0 0 8px 8px;
+  }
+
+  .login-form img {
+    max-width: 40%;
+    max-height: 40%;
+  }
+}
+
+/* Adaptación para modo luz */
+@media (prefers-color-scheme: light) {
+  .login-container {
+    color: #1A3C6D;
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  }
+
+  .login-grid {
+    border-color: #B6D7ED;
+  }
+
+  .login-illustration {
+    border-right-color: #B6D7ED;
+  }
+
+  .login-form {
+    background-color: #E3F2FD;
+    color: #1A3C6D;
+  }
+
+  .login-form h1 {
+    color: #1A3C6D;
+  }
+
+  .login-form input {
+    background-color: #FFFFFF;
+    color: #1A3C6D;
+    border-color: #B6D7ED;
+  }
+
+  .login-form input:focus {
+    border-color: #1A3C6D;
+  }
+
+  .login-form .password-strength span {
+    color: #B6D7ED;
+  }
+
+  .login-form .password-strength div {
+    background-color: #B6D7ED;
+  }
+
+  .login-form .sign-in-btn {
+    background-color: #1A3C6D;
+    color: #FFFFFF;
+  }
+
+  .login-form .sign-in-btn:hover {
+    border-color: #B6D7ED;
+    background-color: #2E4A9C;
+  }
+
+  .login-form .create-account-btn {
+    background-color: #B6D7ED;
+    color: #1A3C6D;
+  }
+
+  .login-form .create-account-btn:hover {
+    background-color: #BBDEFB;
+  }
+}

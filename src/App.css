@@ -1,0 +1,7 @@
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .custom-main-content {
+    padding: 16px !important; /* Aumentamos ligeramente el padding para mejor legibilidad */
+    box-sizing: border-box;
+  }
+}

@@ -1,0 +1,231 @@
+/* Estilos base para la página de Camas */
+.camas-container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color: #1A3C6D;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+/* Estilos del menú superior */
+.camas-nav {
+    background-color: #1A3C6D;
+    padding: 1rem 0;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+}
+
+.nav-item {
+    position: relative;
+    margin: 0 1rem;
+}
+
+.nav-link {
+    color: #FFFFFF;
+    font-size: 1.1em;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #2E4A9C;
+}
+
+/* Estilos del menú desplegable */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #E3F2FD;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #B6D7ED;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.nav-item:hover .dropdown {
+    display: block;
+}
+
+.dropdown li {
+    padding: 0.5rem 1rem;
+}
+
+.dropdown li a {
+    color: #1A3C6D;
+    text-decoration: none;
+    font-size: 1em;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown li a:hover {
+    background-color: #BBDEFB;
+}
+
+/* Estilos del submenú (Historia Clínica -> Evolución) */
+.dropdown-item {
+    position: relative;
+}
+
+.sub-dropdown {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: #E3F2FD;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #B6D7ED;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.dropdown-item:hover .sub-dropdown {
+    display: block;
+}
+
+.sub-dropdown li a {
+    color: #1A3C6D;
+    padding: 0.5rem 1rem;
+    display: block;
+}
+
+.sub-dropdown li a:hover {
+    background-color: #BBDEFB;
+}
+
+/* Contenido principal */
+.camas-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.camas-content h1 {
+    font-size: 2.5em;
+    color: #1A3C6D;
+    margin-bottom: 1rem;
+}
+
+.camas-content p {
+    font-size: 1.2em;
+    color: #1A3C6D;
+}
+
+/* Adaptación para modo oscuro */
+@media (prefers-color-scheme: dark) {
+    .camas-container {
+        background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+        color: #1A3C6D;
+    }
+
+    .camas-nav {
+        background-color: #1A3C6D;
+    }
+
+    .nav-link {
+        color: #FFFFFF;
+    }
+
+    .nav-link:hover {
+        background-color: #2E4A9C;
+    }
+
+    .dropdown {
+        background-color: #E3F2FD;
+    }
+
+    .dropdown li a {
+        color: #1A3C6D;
+    }
+
+    .dropdown li a:hover {
+        background-color: #BBDEFB;
+    }
+
+    .sub-dropdown {
+        background-color: #E3F2FD;
+    }
+
+    .sub-dropdown li a {
+        color: #1A3C6D;
+    }
+
+    .sub-dropdown li a:hover {
+        background-color: #BBDEFB;
+    }
+
+    .camas-content h1 {
+        color: #1A3C6D;
+    }
+
+    .camas-content p {
+        color: #1A3C6D;
+    }
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+    .nav-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-item {
+        margin: 0.5rem 0;
+    }
+
+    .dropdown {
+        position: static;
+        display: none;
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+    }
+
+    .nav-item:hover .dropdown {
+        display: block;
+    }
+
+    .sub-dropdown {
+        position: static;
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+    }
+
+    .dropdown-item:hover .sub-dropdown {
+        display: block;
+    }
+}
