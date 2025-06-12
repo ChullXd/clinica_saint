@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { styled, ThemeProvider, createTheme } from "@mui/material/styles";
-import { Box, Typography, IconButton, Button } from "@mui/material";
+import { Box, Typography, IconButton, Button } from "@mui/material"; // Añadimos useNavigate
 import { Menu as MenuIcon, Person as PersonIcon } from "@mui/icons-material";
 import SidebarMenu from "./pages/SidebarMenu/SidebarMenu";
-import logoHorizontal from "./assets/png/LogoHorizontal.png";
 import logo from "./assets/png/Logo1.png";
 import ReservationTabs from "./pages/Programacion/Preadmision/ReservationTabs";
+import AgendaVirtual from "./pages/Programacion/AgendaVirtual/AgendaVirtual";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
@@ -84,6 +85,7 @@ const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState("dashboard");
   const [isSmallLogo, setIsSmallLogo] = useState(false);
   const sidebarListRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate(); // Hook para navegación
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -97,8 +99,8 @@ const App: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Lógica de logout sin navegación (puedes implementar redirección manual si es necesario)
-    console.log("Logout clicked");
+    // Redirige al login al hacer logout
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -126,6 +128,8 @@ const App: React.FC = () => {
     switch (selectedPage) {
       case "PREADMISION":
         return <ReservationTabs />;
+      case "AGENDA VIRTUAL":
+        return <AgendaVirtual />; // Añadimos AgendaVirtual aquí
       default:
         return <Typography>Selecciona una opción del menú</Typography>; // Placeholder por defecto
     }

@@ -29,8 +29,9 @@ import {
   Add as AddIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
-import RegistroModal from "./RegistroModal"; // Importamos el modal
+import RegistroModal from "./RegistroModal";
 import "./ConsultaExternaPage.css";
+import ProcedimientosDataGrid from "./ProcedimientosDataGrid/ProcedimientosDataGrid";
 
 const CirugíaPreadmision: React.FC = () => {
   const [anestesiologoChecked, setAnestesiologoChecked] = useState(false);
@@ -40,61 +41,6 @@ const CirugíaPreadmision: React.FC = () => {
     page: 0,
     pageSize: 5,
   });
-
-  // Estado para el DataGrid
-  const [columns, setColumns] = useState<GridColDef[]>([
-    {
-      field: "codProcedimiento",
-      headerName: "Cod. Procedimiento",
-      width: 200,
-      editable: true,
-    },
-    {
-      field: "detalleProcedimiento",
-      headerName: "Detalle de Procedimiento",
-      width: 300,
-      editable: true,
-    },
-    {
-      field: "actions",
-      headerName: "Acciones",
-      width: 100,
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton
-          color="error"
-          onClick={() => handleDeleteRow(params.row.id)}
-          size="small"
-        >
-          <CloseIcon />
-        </IconButton>
-      ),
-    },
-  ]);
-  const [rows, setRows] = useState([
-    {
-      id: 1,
-      codProcedimiento: "",
-      detalleProcedimiento: "Extracción de apéndice",
-    },
-    {
-      id: 2,
-      codProcedimiento: "",
-      detalleProcedimiento: "Reparación de hernia",
-    },
-  ]);
-
-  const handleAddRow = () => {
-    const newRow = {
-      id: Date.now(),
-      codProcedimiento: "",
-      detalleProcedimiento: "",
-    };
-    setRows([...rows, newRow]);
-  };
-
-  const handleDeleteRow = (id: number) => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
 
   // Estados para las horas de inicio y fin
   const [inicioCirugia, setInicioCirugia] = useState("");
@@ -435,32 +381,7 @@ const CirugíaPreadmision: React.FC = () => {
         />
         <Grid container spacing={3} className="reservation-grid">
           <Grid item xs={12} sm={8}>
-            <Button
-              variant="contained"
-              onClick={handleAddRow}
-              sx={{
-                mb: 2,
-                bgcolor: "#4A90E2",
-                "&:hover": { bgcolor: "#3A78C2" },
-              }}
-            >
-              Agregar Procedimiento
-            </Button>
-            <Box sx={{ width: "100%", height: 400 }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                paginationModel={paginationModel}
-                onPaginationModelChange={setPaginationModel}
-                pageSizeOptions={[5, 10, 20]}
-                sx={{
-                  bgcolor: "#F7FAFF",
-                  borderRadius: 2,
-                  width: "100%",
-                  boxSizing: "border-box",
-                }}
-              />
-            </Box>
+            <ProcedimientosDataGrid /> {/* Usamos el nuevo componente */}
             <TextField
               fullWidth
               label="Observaciones"
