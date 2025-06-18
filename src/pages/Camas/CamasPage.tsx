@@ -43,23 +43,26 @@ const Camas: React.FC = () => {
   });
   const [patientData, setPatientData] = useState<number[][]>([
     [0, 1, 2, 3], // EMERGENCIA
-    [4, 5, 6, 7], // HOSPITALIZACIÓN
-    [8, 9, 10, 11], // POSTQUIRÚRGICO
-    [12, 13, 14, 15], // QUIRÓFANO
-    [16, 17, 18, 19], // NEONATOS
-  ]);
+    [0, 1, 2, 3], // HOSPITALIZACIÓN
+    [0, 1, 2, 3], // POSTQUIRÚRGICO
+    [0, 1, 2, 3], // QUIRÓFANO
+    [0, 1, 2, 3], // NEONATOS
+  ]); // Cada pestaña tiene sus propias 4 camas (índices 0-3)
   const [filledData, setFilledData] = useState<
     Record<
       number,
-      {
-        name: string;
-        id: string;
-        genderImage: string;
-        admissionDate: string;
-        dischargeDate: string;
-      }
+      Record<
+        number,
+        {
+          name: string;
+          id: string;
+          genderImage: string;
+          admissionDate: string;
+          dischargeDate: string;
+        }
+      >
     >
-  >({});
+  >({ 0: {}, 1: {}, 2: {}, 3: {}, 4: {} }); // Objeto anidado por pestaña
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
@@ -94,17 +97,20 @@ const Camas: React.FC = () => {
   };
 
   const handleSave = () => {
-    if (selectedCard !== null) {
+    if (selectedCard !== null && selectedTab !== null) {
       const genderImage =
         formData.sex === "Femenino" ? PacienteMujer : PacienteHombre;
       setFilledData((prev) => ({
         ...prev,
-        [selectedCard]: {
-          name: formData.name,
-          id: formData.id,
-          genderImage,
-          admissionDate: formData.admissionDate,
-          dischargeDate: formData.dischargeDate,
+        [selectedTab]: {
+          ...prev[selectedTab],
+          [selectedCard]: {
+            name: formData.name,
+            id: formData.id,
+            genderImage,
+            admissionDate: formData.admissionDate,
+            dischargeDate: formData.dischargeDate,
+          },
         },
       }));
       handleCloseDialog();
@@ -116,7 +122,7 @@ const Camas: React.FC = () => {
     return (
       <Grid container spacing={2} sx={{ marginBottom: 3, paddingLeft: 0 }}>
         {currentTabData.map((index) => {
-          const data = filledData[index];
+          const data = filledData[selectedTab]?.[index];
           return (
             <Grid item xs={12} sm={6} md={3} key={index}>
               {data ? (
@@ -151,24 +157,24 @@ const Camas: React.FC = () => {
                         {calculateDays(data.admissionDate)} días de estadía
                       </Typography>
                       <Box sx={{ display: "flex", justifyContent: "space-around", marginTop: "10px" }}>
-                        <IconButton>
-                          <img src={HistoriaClinica} alt="Historia Clínica" style={{ width: "24px", height: "24px" }} />
+                        <IconButton title="Historia Clínica">
+                          <img src={HistoriaClinica} alt="Historia Clínica" style={{ width: "32px", height: "32px" }} />
                         </IconButton>
-                        <IconButton>
-                          <img src={Enfermeria} alt="Enfermería" style={{ width: "24px", height: "24px" }} />
+                        <IconButton title="Enfermería">
+                          <img src={Enfermeria} alt="Enfermería" style={{ width: "32px", height: "32px" }} />
                         </IconButton>
-                        <IconButton>
-                          <img src={AltaMedica} alt="Alta Médica" style={{ width: "24px", height: "24px" }} />
+                        <IconButton title="Alta Médica">
+                          <img src={AltaMedica} alt="Alta Médica" style={{ width: "32px", height: "32px" }} />
                         </IconButton>
-                        <IconButton>
-                          <img src={CertificadoMedico} alt="Certificado Médico" style={{ width: "24px", height: "24px" }} />
+                        <IconButton title="Certificado Médico">
+                          <img src={CertificadoMedico} alt="Certificado Médico" style={{ width: "32px", height: "32px" }} />
                         </IconButton>
                       </Box>
                     </Box>
                     <Button
                       className="camas-card-button"
                       onClick={() => handleOpenDialog(index)}
-                      sx={{ marginTop: "10px", width: "100%" }}
+                      sx={{ marginTop: "10px", width: "100%", padding: "2px 6px", fontSize: "0.8rem" }}
                     >
                       Editar
                     </Button>
@@ -196,7 +202,7 @@ const Camas: React.FC = () => {
   // Función auxiliar para calcular días de estadía
   const calculateDays = (admissionDate: string) => {
     const start = new Date(admissionDate);
-    const today = new Date("2025-06-18T11:48:00-05:00"); // 11:48 AM -05, June 18, 2025
+    const today = new Date("2025-06-18T12:18:00-05:00"); // 12:18 PM -05, June 18, 2025
     const diffTime = Math.abs(today.getTime() - start.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
@@ -205,6 +211,9 @@ const Camas: React.FC = () => {
   return (
     <div className="camas-container">
       <div className="camas-inner-container">
+        <Typography variant="h5" sx={{ color: "#1A3C6D", fontWeight: "bold", marginBottom: "20px", paddingLeft: 0 }}>
+          ADMINISTRACION DE CAMAS
+        </Typography>
         <Box sx={{ borderBottom: 1, borderColor: "divider", margin: 0, padding: 0 }}>
           <Tabs
             value={selectedTab}

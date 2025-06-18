@@ -78,8 +78,8 @@
   background-color: #1A3C6D;
   color: #FFFFFF;
   text-transform: none;
-  font-size: 0.9rem;
-  padding: 8px 16px;
+  font-size: 0.8rem;
+  padding: 2px 6px;
   border-radius: 6px;
   width: 100%;
 }
@@ -122,7 +122,7 @@
 .camas-dialog .MuiTextField-root {
   margin-bottom: 15px;
   background-color: #FFFFFF;
-  borderRadius: "4px",
+  border-radius: "4px",
 }
 
 .camas-dialog .MuiInputBase-root {
@@ -141,4 +141,10 @@
   font-size: 0.9rem;
   padding: 8px 16px;
   border-radius: 6px;
+}
+
+/* Asegurar que los IconButton sean cuadrados */
+.MuiIconButton-root {
+  border-radius: 0 !important; /* Forzar cuadrado */
+  padding: 4px; /* Ajuste de padding para mantener proporción */
 }
