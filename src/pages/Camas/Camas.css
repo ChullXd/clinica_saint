@@ -8,12 +8,12 @@
   padding: 20px;
   box-sizing: border-box;
   min-height: 100vh;
-  overflow-y: auto; /* Permitir scroll si el contenido es largo */
+  overflow-y: auto;
 }
 
 .camas-inner-container {
   width: 100%;
-  max-width: 1200px; /* Más estrecho que el reservation-container para mejor legibilidad */
+  max-width: 1200px;
   background: #FFFFFF;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -48,12 +48,8 @@
 .camas-card {
   background: #F5F5F5;
   border-radius: 6px;
-  padding: 20px;
+  padding: 0;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
   transition: transform 0.2s ease-in-out;
 }
 
@@ -61,23 +57,20 @@
   transform: translateY(-2px);
 }
 
+.camas-card .MuiCardContent-root {
+  padding: 0;
+  text-align: center;
+}
+
+.camas-card .MuiCardContent-root > div {
+  background-color: #E6F0FA;
+  border-radius: 8px;
+  padding: 10px;
+}
+
 .camas-card img {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
-}
-
-.camas-card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #1A3C6D;
-  margin-bottom: 10px;
-}
-
-.camas-card-text {
-  font-size: 0.9rem;
-  color: #4A4A4A;
-  margin-bottom: 8px;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
 }
 
 .camas-card-button {
@@ -88,6 +81,7 @@
   font-size: 0.9rem;
   padding: 8px 16px;
   border-radius: 6px;
+  width: 100%;
 }
 
 .camas-card-button:hover {
@@ -120,7 +114,6 @@
   margin-top: 10px;
 }
 
-/* Estilos para el diálogo, alineados con reservation-input */
 .camas-dialog .MuiDialogContent-root {
   background-color: #F5F5F5;
   padding: 20px;
@@ -129,7 +122,7 @@
 .camas-dialog .MuiTextField-root {
   margin-bottom: 15px;
   background-color: #FFFFFF;
-  border-radius: 6px;
+  borderRadius: "4px",
 }
 
 .camas-dialog .MuiInputBase-root {
