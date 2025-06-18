@@ -1,231 +1,151 @@
-/* Estilos base para la página de Camas */
+/* Camas.css */
 .camas-container {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-    color: #1A3C6D;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  padding: 20px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  overflow-y: auto; /* Permitir scroll si el contenido es largo */
 }
 
-/* Estilos del menú superior */
-.camas-nav {
-    background-color: #1A3C6D;
-    padding: 1rem 0;
-    width: 100%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.camas-inner-container {
+  width: 100%;
+  max-width: 1200px; /* Más estrecho que el reservation-container para mejor legibilidad */
+  background: #FFFFFF;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 40px;
+  box-sizing: border-box;
 }
 
-.nav-list {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    justify-content: center;
+.camas-tabs {
+  border-bottom: 1px solid #B6D7ED;
+  margin-bottom: 30px;
 }
 
-.nav-item {
-    position: relative;
-    margin: 0 1rem;
+.camas-tabs .MuiTab-root {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1A3C6D;
+  text-transform: none;
+  padding: 12px 16px;
 }
 
-.nav-link {
-    color: #FFFFFF;
-    font-size: 1.1em;
-    font-weight: 500;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    display: block;
-    transition: background-color 0.3s ease;
+.camas-tabs .MuiTab-root.Mui-selected {
+  color: #1A3C6D;
+  font-weight: 800;
+  background-color: #E3F2FD;
 }
 
-.nav-link:hover {
-    background-color: #2E4A9C;
+.camas-tabs .MuiTabs-indicator {
+  background-color: #1A3C6D;
+  height: 3px;
 }
 
-/* Estilos del menú desplegable */
-.dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #E3F2FD;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border: 1px solid #B6D7ED;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+.camas-card {
+  background: #F5F5F5;
+  border-radius: 6px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
 }
 
-.nav-item:hover .dropdown {
-    display: block;
+.camas-card:hover {
+  transform: translateY(-2px);
 }
 
-.dropdown li {
-    padding: 0.5rem 1rem;
+.camas-card img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
 }
 
-.dropdown li a {
-    color: #1A3C6D;
-    text-decoration: none;
-    font-size: 1em;
-    display: block;
-    transition: background-color 0.3s ease;
+.camas-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1A3C6D;
+  margin-bottom: 10px;
 }
 
-.dropdown li a:hover {
-    background-color: #BBDEFB;
+.camas-card-text {
+  font-size: 0.9rem;
+  color: #4A4A4A;
+  margin-bottom: 8px;
 }
 
-/* Estilos del submenú (Historia Clínica -> Evolución) */
-.dropdown-item {
-    position: relative;
+.camas-card-button {
+  margin-top: 10px;
+  background-color: #1A3C6D;
+  color: #FFFFFF;
+  text-transform: none;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 6px;
 }
 
-.sub-dropdown {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 100%;
-    background-color: #E3F2FD;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border: 1px solid #B6D7ED;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+.camas-card-button:hover {
+  background-color: #153e6e;
 }
 
-.dropdown-item:hover .sub-dropdown {
-    display: block;
+.camas-card-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: #E3F2FD;
+  border: 1px dashed #B6D7ED;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.sub-dropdown li a {
-    color: #1A3C6D;
-    padding: 0.5rem 1rem;
-    display: block;
+.camas-card-empty:hover {
+  background: #D1E9FF;
 }
 
-.sub-dropdown li a:hover {
-    background-color: #BBDEFB;
+.camas-card-empty .MuiIconButton-root {
+  color: #1A3C6D;
 }
 
-/* Contenido principal */
-.camas-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
+.camas-card-empty-text {
+  font-size: 0.9rem;
+  color: #1A3C6D;
+  margin-top: 10px;
 }
 
-.camas-content h1 {
-    font-size: 2.5em;
-    color: #1A3C6D;
-    margin-bottom: 1rem;
+/* Estilos para el diálogo, alineados con reservation-input */
+.camas-dialog .MuiDialogContent-root {
+  background-color: #F5F5F5;
+  padding: 20px;
 }
 
-.camas-content p {
-    font-size: 1.2em;
-    color: #1A3C6D;
+.camas-dialog .MuiTextField-root {
+  margin-bottom: 15px;
+  background-color: #FFFFFF;
+  border-radius: 6px;
 }
 
-/* Adaptación para modo oscuro */
-@media (prefers-color-scheme: dark) {
-    .camas-container {
-        background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-        color: #1A3C6D;
-    }
-
-    .camas-nav {
-        background-color: #1A3C6D;
-    }
-
-    .nav-link {
-        color: #FFFFFF;
-    }
-
-    .nav-link:hover {
-        background-color: #2E4A9C;
-    }
-
-    .dropdown {
-        background-color: #E3F2FD;
-    }
-
-    .dropdown li a {
-        color: #1A3C6D;
-    }
-
-    .dropdown li a:hover {
-        background-color: #BBDEFB;
-    }
-
-    .sub-dropdown {
-        background-color: #E3F2FD;
-    }
-
-    .sub-dropdown li a {
-        color: #1A3C6D;
-    }
-
-    .sub-dropdown li a:hover {
-        background-color: #BBDEFB;
-    }
-
-    .camas-content h1 {
-        color: #1A3C6D;
-    }
-
-    .camas-content p {
-        color: #1A3C6D;
-    }
+.camas-dialog .MuiInputBase-root {
+  font-size: 0.9rem;
+  padding: 6px;
+  border-radius: 6px;
 }
 
-/* Media query para pantallas pequeñas */
-@media (max-width: 768px) {
-    .nav-list {
-        flex-direction: column;
-        align-items: center;
-    }
+.camas-dialog .MuiInputLabel-root {
+  font-size: 0.9rem;
+  color: #1A3C6D;
+}
 
-    .nav-item {
-        margin: 0.5rem 0;
-    }
-
-    .dropdown {
-        position: static;
-        display: none;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
-    }
-
-    .nav-item:hover .dropdown {
-        display: block;
-    }
-
-    .sub-dropdown {
-        position: static;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
-    }
-
-    .dropdown-item:hover .sub-dropdown {
-        display: block;
-    }
+.camas-dialog .MuiButton-root {
+  text-transform: none;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 6px;
 }

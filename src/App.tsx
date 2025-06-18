@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { styled, ThemeProvider, createTheme } from "@mui/material/styles";
-import { Box, Typography, IconButton, Button } from "@mui/material"; // Añadimos useNavigate
+import { Box, Typography, IconButton, Button } from "@mui/material";
 import { Menu as MenuIcon, Person as PersonIcon } from "@mui/icons-material";
 import SidebarMenu from "./pages/SidebarMenu/SidebarMenu";
 import logo from "./assets/png/Logo1.png";
 import ReservationTabs from "./pages/Programacion/Preadmision/ReservationTabs";
 import AgendaVirtual from "./pages/Programacion/AgendaVirtual/AgendaVirtual";
 import { useNavigate } from "react-router-dom";
+import Camas from "./pages/Camas/CamasPage";
 
 const theme = createTheme();
 
@@ -85,7 +86,7 @@ const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState("dashboard");
   const [isSmallLogo, setIsSmallLogo] = useState(false);
   const sidebarListRef = useRef<HTMLDivElement | null>(null);
-  const navigate = useNavigate(); // Hook para navegación
+  const navigate = useNavigate();
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -99,7 +100,6 @@ const App: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Redirige al login al hacer logout
     navigate("/login");
   };
 
@@ -123,15 +123,17 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // Renderizado dinámico basado en selectedPage
+  // Render content based on selected page
   const renderContent = () => {
     switch (selectedPage) {
       case "PREADMISION":
         return <ReservationTabs />;
       case "AGENDA VIRTUAL":
-        return <AgendaVirtual />; // Añadimos AgendaVirtual aquí
+        return <AgendaVirtual />;
+      case "CAMAS":
+        return <Camas />; // Render Camas component when "CAMAS" is selected
       default:
-        return <Typography>Selecciona una opción del menú</Typography>; // Placeholder por defecto
+        return <Typography>Selecciona una opción del menú</Typography>;
     }
   };
 

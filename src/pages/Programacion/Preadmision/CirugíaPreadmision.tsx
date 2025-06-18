@@ -15,7 +15,6 @@ import {
   FormControlLabel,
   IconButton,
 } from "@mui/material";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import {
   Event as EventIcon,
   AccessTime as TimeIcon,
@@ -27,11 +26,12 @@ import {
   CheckCircle as ConfirmIcon,
   Cancel as CancelIcon,
   Add as AddIcon,
-  Close as CloseIcon,
 } from "@mui/icons-material";
 import RegistroModal from "./RegistroModal";
 import "./ConsultaExternaPage.css";
 import ProcedimientosDataGrid from "./ProcedimientosDataGrid/ProcedimientosDataGrid";
+import apiService from "../../../apiService";
+import { AdmMedico } from "../../interface/models";
 
 const CirugíaPreadmision: React.FC = () => {
   const [anestesiologoChecked, setAnestesiologoChecked] = useState(false);
@@ -47,7 +47,18 @@ const CirugíaPreadmision: React.FC = () => {
   const [finCirugia, setFinCirugia] = useState("");
   const [duracionEstimada, setDuracionEstimada] = useState("");
 
-  // Calcular duración cuando cambien inicio o fin
+  // Estados para el paciente
+  const [pacienteNombre, setPacienteNombre] = useState("");
+  const [pacienteTelefono, setPacienteTelefono] = useState("");
+  const [pacienteCorreo, setPacienteCorreo] = useState("");
+
+  // Estados para el médico
+  const [medicoNombre, setMedicoNombre] = useState("");
+  const [medicoTelefono, setMedicoTelefono] = useState("");
+  const [medicoCorreo, setMedicoCorreo] = useState("");
+  const [medicoEspecialidad, setMedicoEspecialidad] = useState("");
+
+  // Calcular duración
   useEffect(() => {
     if (inicioCirugia && finCirugia) {
       const start = new Date(`1970-01-01T${inicioCirugia}:00`);
@@ -57,7 +68,7 @@ const CirugíaPreadmision: React.FC = () => {
         const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
         setDuracionEstimada(diffHours.toString());
       } else {
-        setDuracionEstimada(""); // Reinicia si las horas no son válidas
+        setDuracionEstimada("");
       }
     } else {
       setDuracionEstimada("");
@@ -77,14 +88,69 @@ const CirugíaPreadmision: React.FC = () => {
     setOpenModal(false);
   };
 
-  const handleSaveModal = (data: { noIdentificacion: string; nombre: string; telefono: string; correo: string }) => {
+  const handleSaveModal = async (data: AdmMedico) => {
     if (modalType === "paciente") {
-      // Lógica para actualizar datos del paciente
-      console.log("Paciente guardado:", data);
+      // Validar campos obligatorios
+      if (!data.Nombre || !data.Correo || !data.Telefono || !data.Direccion) {
+        alert("Por favor, completa todos los campos obligatorios.");
+        return;
+      }
+
+      try {
+        const nuevoPaciente: AdmMedico = {
+          Nombre: data.Nombre,
+          Correo: data.Correo,
+          Telefono: data.Telefono,
+          Direccion: data.Direccion,
+        };
+
+        const response = await apiService.savePaciente(nuevoPaciente);
+        console.log("Paciente creado:", response);
+
+        // Actualiza los estados locales
+        setPacienteNombre(data.Nombre);
+        setPacienteTelefono(data.Telefono);
+        setPacienteCorreo(data.Correo);
+      } catch (error: any) {
+        const message =
+          error.message ||
+          "Error al crear el paciente. Por favor, verifica los datos e intenta de nuevo.";
+        console.error("Error al crear paciente:", error);
+        alert(message);
+      }
     } else if (modalType === "medico") {
-      // Lógica para actualizar datos del médico
-      console.log("Médico guardado:", data);
+      // Validar campos obligatorios
+      if (!data.Nombre || !data.Correo || !data.Telefono || !data.Direccion || !data.Especialidad) {
+        alert("Por favor, completa todos los campos obligatorios, incluyendo la especialidad.");
+        return;
+      }
+
+      try {
+        const nuevoMedico: AdmMedico = {
+          Nombre: data.Nombre,
+          Correo: data.Correo,
+          Telefono: data.Telefono,
+          Direccion: data.Direccion,
+          Especialidad: data.Especialidad,
+        };
+
+        const response = await apiService.saveMedico(nuevoMedico);
+        console.log("Médico creado:", response);
+
+        // Actualiza los estados locales
+        setMedicoNombre(data.Nombre);
+        setMedicoTelefono(data.Telefono);
+        setMedicoCorreo(data.Correo);
+        setMedicoEspecialidad(data.Especialidad || "");
+      } catch (error: any) {
+        const message =
+          error.message ||
+          "Error al crear el médico. Por favor, verifica los datos e intenta de nuevo.";
+        console.error("Error al crear médico:", error);
+        alert(message);
+      }
     }
+    handleCloseModal();
   };
 
   return (
@@ -186,9 +252,11 @@ const CirugíaPreadmision: React.FC = () => {
             <Box display="flex" alignItems="center">
               <TextField
                 fullWidth
-                label="No. Identificación"
+                label="Nombre"
                 variant="outlined"
                 className="reservation-input"
+                value={pacienteNombre}
+                onChange={(e) => setPacienteNombre(e.target.value)}
                 InputProps={{
                   startAdornment: <PersonIcon sx={{ color: "#4A90E2", mr: 1 }} />,
                 }}
@@ -210,24 +278,11 @@ const CirugíaPreadmision: React.FC = () => {
           <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
-              label="Nombre"
-              variant="outlined"
-              className="reservation-input"
-              InputProps={{
-                startAdornment: <PersonIcon sx={{ color: "#4A90E2", mr: 1 }} />,
-              }}
-              sx={{
-                bgcolor: "#F7FAFF",
-                "& .MuiInputBase-root": { height: "40px" },
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
               label="Teléfono"
               variant="outlined"
               className="reservation-input"
+              value={pacienteTelefono}
+              onChange={(e) => setPacienteTelefono(e.target.value)}
               InputProps={{
                 startAdornment: <PersonIcon sx={{ color: "#4A90E2", mr: 1 }} />,
               }}
@@ -243,6 +298,8 @@ const CirugíaPreadmision: React.FC = () => {
               label="Correo"
               variant="outlined"
               className="reservation-input"
+              value={pacienteCorreo}
+              onChange={(e) => setPacienteCorreo(e.target.value)}
               InputProps={{
                 startAdornment: <PersonIcon sx={{ color: "#4A90E2", mr: 1 }} />,
               }}
@@ -293,6 +350,8 @@ const CirugíaPreadmision: React.FC = () => {
               label="Nombre"
               variant="outlined"
               className="reservation-input"
+              value={medicoNombre}
+              onChange={(e) => setMedicoNombre(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />
@@ -310,6 +369,8 @@ const CirugíaPreadmision: React.FC = () => {
               label="Teléfono"
               variant="outlined"
               className="reservation-input"
+              value={medicoTelefono}
+              onChange={(e) => setMedicoTelefono(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />
@@ -327,6 +388,27 @@ const CirugíaPreadmision: React.FC = () => {
               label="Correo"
               variant="outlined"
               className="reservation-input"
+              value={medicoCorreo}
+              onChange={(e) => setMedicoCorreo(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />
+                ),
+              }}
+              sx={{
+                bgcolor: "#F7FAFF",
+                "& .MuiInputBase-root": { height: "40px" },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              fullWidth
+              label="Especialidad"
+              variant="outlined"
+              className="reservation-input"
+              value={medicoEspecialidad}
+              onChange={(e) => setMedicoEspecialidad(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />
@@ -381,7 +463,7 @@ const CirugíaPreadmision: React.FC = () => {
         />
         <Grid container spacing={3} className="reservation-grid">
           <Grid item xs={12} sm={8}>
-            <ProcedimientosDataGrid /> {/* Usamos el nuevo componente */}
+            <ProcedimientosDataGrid />
             <TextField
               fullWidth
               label="Observaciones"
@@ -483,8 +565,8 @@ const CirugíaPreadmision: React.FC = () => {
                   label="Tipo Atención"
                   startAdornment={<MedicalIcon sx={{ color: "#4A90E2", mr: 1 }} />}
                 >
-                  <MenuItem value="mañana">Hospitalario</MenuItem>
-                  <MenuItem value="tarde">Ambulatorio</MenuItem>
+                  <MenuItem value="hospitalario">Hospitalario</MenuItem>
+                  <MenuItem value="ambulatorio">Ambulatorio</MenuItem>
                 </Select>
               </FormControl>
               <FormControl fullWidth variant="outlined" className="reservation-input">
@@ -492,6 +574,8 @@ const CirugíaPreadmision: React.FC = () => {
                 <Select
                   label="Tipo de Habitación"
                   startAdornment={<RoomIcon sx={{ color: "#4A90E2", mr: 1 }} />}
+                  value={tipoHabitacion}
+                  onChange={(e) => setTipoHabitacion(e.target.value)}
                 >
                   <MenuItem value="Privada">Privada</MenuItem>
                   <MenuItem value="Individual">Individual</MenuItem>

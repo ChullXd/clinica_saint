@@ -1,154 +1,182 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-  Box,
-  Typography,
-  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   TextField,
   Button,
-  Modal,
-} from "@mui/material";
-import {
-  Person as PersonIcon,
-  Phone as PhoneIcon,
-  Email as EmailIcon,
-} from "@mui/icons-material";
+  Box,
+  Typography,
+} from '@mui/material';
+import { Person as PersonIcon } from '@mui/icons-material';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { AdmMedico } from '../../interface/models';
 
 interface RegistroModalProps {
   open: boolean;
-  type: "paciente" | "medico" | null;
+  type: 'paciente' | 'medico' | null;
   onClose: () => void;
-  onSave: (data: { noIdentificacion: string; nombre: string; telefono: string; correo: string }) => void;
+  onSave: (data: AdmMedico) => void;
 }
 
-const RegistroModal: React.FC<RegistroModalProps> = ({ open, type, onClose, onSave }) => {
-  const [formData, setFormData] = useState({
-    noIdentificacion: "",
-    nombre: "",
-    telefono: "",
-    correo: "",
-  });
+const patientSchema = Yup.object().shape({
+  Nombre: Yup.string()
+    .required('El nombre es obligatorio')
+    .min(2, 'El nombre debe tener al menos 2 caracteres')
+    .max(60, 'El nombre no puede exceder 60 caracteres'),
+  Correo: Yup.string()
+    .email('Formato de correo inválido')
+    .required('El correo es obligatorio')
+    .max(100, 'El correo no puede exceder 100 caracteres'),
+  Telefono: Yup.string()
+    .required('El teléfono es obligatorio')
+    .matches(/^\d{10}$/, 'El teléfono debe tener 10 dígitos'),
+  Direccion: Yup.string()
+    .required('La dirección es obligatoria')
+    .min(5, 'La dirección debe tener al menos 5 caracteres')
+    .max(150, 'La dirección no puede exceder 150 caracteres'),
+});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+const medicoSchema = Yup.object().shape({
+  Nombre: Yup.string()
+    .required('El nombre es obligatorio')
+    .min(2, 'El nombre debe tener al menos 2 caracteres')
+    .max(60, 'El nombre no puede exceder 60 caracteres'),
+  Correo: Yup.string()
+    .email('Formato de correo inválido')
+    .required('El correo es obligatorio')
+    .max(100, 'El correo no puede exceder 100 caracteres'),
+  Telefono: Yup.string()
+    .required('El teléfono es obligatorio')
+    .matches(/^\d{10}$/, 'El teléfono debe tener 10 dígitos'),
+  Direccion: Yup.string()
+    .required('La dirección es obligatoria')
+    .min(5, 'La dirección debe tener al menos 5 caracteres')
+    .max(150, 'La dirección no puede exceder 150 caracteres'),
+  Especialidad: Yup.string()
+    .required('La especialidad es obligatoria')
+    .min(3, 'La especialidad debe tener al menos 3 caracteres')
+    .max(50, 'La especialidad no puede exceder 50 caracteres'),
+});
+
+const RegistroModal: React.FC<RegistroModalProps> = ({ open, type, onClose, onSave }) => {
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const initialValues: AdmMedico = {
+    Nombre: '',
+    Correo: '',
+    Telefono: '',
+    Direccion: '',
+    Especialidad: '',
   };
 
-  const handleSave = () => {
-    onSave(formData);
-    onClose();
+  const handleSubmit = async (
+    values: AdmMedico,
+    { setSubmitting, resetForm }: any
+  ) => {
+    try {
+      await onSave(values);
+      setSubmitError(null);
+      resetForm();
+      onClose();
+    } catch (err: any) {
+      setSubmitError(err.message || `Error al guardar el ${type === 'paciente' ? 'paciente' : 'médico'}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: { xs: "90%", sm: "600px" },
-          bgcolor: "white",
-          border: "2px solid #000",
-          borderRadius: 4,
-          boxShadow: 24,
-          p: 4,
-        }}
-      >
-        <Typography
-          variant="h6"
-          sx={{ mb: 2, fontWeight: 800, color: "#1A3C6D" }}
-        >
-          {type === "paciente" ? "Registro de paciente" : "Registro de médico"}
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="No Identificación"
-              name="noIdentificacion"
-              value={formData.noIdentificacion}
-              onChange={handleInputChange}
-              variant="outlined"
-              InputProps={{
-                startAdornment: <PersonIcon sx={{ color: "#4A90E2", mr: 1 }} />,
-              }}
-              sx={{ bgcolor: "#F7FAFF", "& .MuiInputBase-root": { height: "40px" } }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Nombre"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleInputChange}
-              variant="outlined"
-              InputProps={{
-                startAdornment: <PersonIcon sx={{ color: "#4A90E2", mr: 1 }} />,
-              }}
-              sx={{ bgcolor: "#F7FAFF", "& .MuiInputBase-root": { height: "40px" } }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Teléfono"
-              name="telefono"
-              value={formData.telefono}
-              onChange={handleInputChange}
-              variant="outlined"
-              InputProps={{
-                startAdornment: <PhoneIcon sx={{ color: "#4A90E2", mr: 1 }} />,
-              }}
-              sx={{ bgcolor: "#F7FAFF", "& .MuiInputBase-root": { height: "40px" } }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Correo Electrónico"
-              name="correo"
-              value={formData.correo}
-              onChange={handleInputChange}
-              variant="outlined"
-              InputProps={{
-                startAdornment: <EmailIcon sx={{ color: "#4A90E2", mr: 1 }} />,
-              }}
-              sx={{ bgcolor: "#F7FAFF", "& .MuiInputBase-root": { height: "40px" } }}
-            />
-          </Grid>
-        </Grid>
-        <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <Button
-            variant="outlined"
-            sx={{
-              borderColor: "#E57373",
-              color: "#E57373",
-              "&:hover": { borderColor: "#D32F2F", color: "#D32F2F" },
-              borderRadius: 3,
-              px: 3,
-              py: 1,
-            }}
-            onClick={onClose}
-          >
-            Cancelar
-          </Button>
-          <Button
-            variant="contained"
-            sx={{
-              bgcolor: "#4A90E2",
-              "&:hover": { bgcolor: "#3A78C2" },
-              borderRadius: 3,
-              px: 3,
-              py: 1,
-            }}
-            onClick={handleSave}
-          >
-            Grabar
-          </Button>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle>
+        <Box display="flex" alignItems="center" gap={1}>
+          <PersonIcon />
+          {type === 'paciente' ? 'Registrar Paciente' : 'Registrar Médico'}
         </Box>
-      </Box>
-    </Modal>
+      </DialogTitle>
+      <DialogContent>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={type === 'paciente' ? patientSchema : medicoSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting, errors }) => (
+            <Form>
+              <Box sx={{ mt: 2 }}>
+                <Field
+                  as={TextField}
+                  fullWidth
+                  label="Nombre"
+                  name="Nombre"
+                  sx={{ mb: 2 }}
+                  error={!!errors.Nombre}
+                  helperText={<ErrorMessage name="Nombre" />}
+                />
+                <Field
+                  as={TextField}
+                  fullWidth
+                  label="Correo"
+                  name="Correo"
+                  type="email"
+                  sx={{ mb: 2 }}
+                  error={!!errors.Correo}
+                  helperText={<ErrorMessage name="Correo" />}
+                />
+                <Field
+                  as={TextField}
+                  fullWidth
+                  label="Teléfono"
+                  name="Telefono"
+                  sx={{ mb: 2 }}
+                  error={!!errors.Telefono}
+                  helperText={<ErrorMessage name="Telefono" />}
+                />
+                <Field
+                  as={TextField}
+                  fullWidth
+                  label="Dirección"
+                  name="Direccion"
+                  sx={{ mb: 2 }}
+                  error={!!errors.Direccion}
+                  helperText={<ErrorMessage name="Direccion" />}
+                />
+                {type === 'medico' && (
+                  <Field
+                    as={TextField}
+                    fullWidth
+                    label="Especialidad"
+                    name="Especialidad"
+                    sx={{ mb: 2 }}
+                    error={!!errors.Especialidad}
+                    helperText={<ErrorMessage name="Especialidad" />}
+                  />
+                )}
+                {submitError && (
+                  <Box sx={{ color: 'red', mt: 2 }}>
+                    <Typography>{submitError}</Typography>
+                  </Box>
+                )}
+              </Box>
+              <DialogActions>
+                <Button onClick={onClose} color="secondary">
+                  Cancelar
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Guardando...' : 'Guardar'}
+                </Button>
+              </DialogActions>
+            </Form>
+          )}
+        </Formik>
+      </DialogContent>
+    </Dialog>
   );
 };
 
