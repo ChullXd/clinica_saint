@@ -20,7 +20,6 @@ import Enfermeria from "/Clinica_Saint/clinica_saint/src/assets/png/Enfermeria.p
 import ServiciosInternos from "/Clinica_Saint/clinica_saint/src/assets/png/ServiciosInternos.png";
 import CargaInsumos from "/Clinica_Saint/clinica_saint/src/assets/png/CargaInsumos.png";
 import OrdenExamen from "/Clinica_Saint/clinica_saint/src/assets/png/OrdenExamen.png";
-import Reasignacion from "/Clinica_Saint/clinica_saint/src/assets/png/Reasignacion.png";
 import "./Camas.css";
 import Hospitalizacion from "./Hopitalizacion/Hospitalizacion";
 import IngresoPaciente from "./IngresoPaciente";
@@ -51,27 +50,27 @@ const Camas: React.FC = () => {
     Array.from({ length: 4 }, (_, i) => i), // POSTQUIRÚRGICO (4 camas)
     Array.from({ length: 3 }, (_, i) => i), // POSTQUIRÚRGICO (4 camas)
   ]);
+  type PacienteData = {
+    sala: string;
+    cama: string;
+    name: string;
+    id: string;
+    sex: string;
+    genderImage: string;
+    admissionDate: string;
+    dischargeDate: string;
+    medicoTratante: { medico: boolean; clinica: boolean };
+    medicoCirujano: { medico: boolean; clinica: boolean };
+    medicoAnestesiologo: string;
+    procedencia: string;
+    cuadroClinico: string;
+    resumen?: string;
+  };
+
   const [filledData, setFilledData] = useState<
     Record<
       number,
-      Record<
-        number,
-        {
-          sala: string;
-          cama: string;
-          name: string;
-          id: string;
-          sex: string;
-          genderImage: string;
-          admissionDate: string;
-          dischargeDate: string;
-          medicoTratante: { medico: boolean; clinica: boolean };
-          medicoCirujano: { medico: boolean; clinica: boolean };
-          medicoAnestesiologo: string;
-          procedencia: string;
-          cuadroClinico: string;
-        }
-      >
+      Record<string | number, PacienteData>
     >
   >({ 0: {}, 1: {}, 2: {}, 3: {}, 4: {} });
 
@@ -87,20 +86,61 @@ const Camas: React.FC = () => {
     EMERGENCIA: [
       { value: "1", label: "CAMA 1" },
       { value: "2", label: "CAMA 2" },
+      { value: "3", label: "CAMA 3" },
+      { value: "4", label: "CAMA 4" },
+      { value: "5", label: "CAMA 5" },
     ],
     HOSPITALIZACIÓN: [
       { value: "3A", label: "CAMA 3A" },
       { value: "3B", label: "CAMA 3B" },
+      { value: "3C", label: "CAMA 3C" },
+      { value: "4", label: "CAMA 4" },
+      { value: "5A", label: "CAMA 5A" },
+      { value: "5B", label: "CAMA 5B" },
+      { value: "5C", label: "CAMA 5C" },
+      { value: "6", label: "CAMA 6" },
+      { value: "7", label: "CAMA 7" },
+      { value: "8", label: "CAMA 8" },
+      { value: "9", label: "CAMA 9" },
+      { value: "10", label: "CAMA 10" },
+      { value: "11", label: "CAMA 11" },
+      { value: "12", label: "CAMA 12" },
+      { value: "13", label: "CAMA 13" },
+      { value: "14", label: "CAMA 14" },
+      { value: "15", label: "CAMA 15" },
     ],
-    POSTOPERATORIO: [{ value: "1", label: "CAMA 1" }],
-    QUIROFANO: [{ value: "Q1", label: "CAMA Q1" }],
+    POSTOPERATORIO: [
+      { value: "1", label: "CAMA 1" },
+      { value: "2", label: "CAMA 2" },
+      { value: "3", label: "CAMA 3" },
+      { value: "4", label: "CAMA 4" },
+      { value: "5", label: "CAMA 5" },
+      { value: "6", label: "CAMA 6" },
+      { value: "7", label: "CAMA 7" },
+      { value: "8", label: "CAMA 8" },
+      { value: "9", label: "CAMA 9" },
+    ],
+    QUIROFANO: [
+      { value: "Q1", label: "CAMA Q1" },
+      { value: "Q2", label: "CAMA Q2" },
+      { value: "Q3", label: "CAMA Q3" },
+      { value: "Q4", label: "CAMA Q4" },
+    ],
+    NEONATOS: [
+      { value: "N1", label: "CAMA N1" },
+      { value: "N2", label: "CAMA N2" },
+      { value: "N3", label: "CAMA N3" },
+    ],
   };
+
+  type SalaKey = keyof typeof camasDisponibles;
 
   const salas = [
     "EMERGENCIA",
     "HOSPITALIZACIÓN",
     "POSTOPERATORIO",
     "QUIROFANO",
+    "NEONATOS",
   ];
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -219,7 +259,57 @@ const Camas: React.FC = () => {
   };
 
   const handleReasignar = () => {
-    // lógica para reasignar
+    const origenTab = salas.findIndex((s) => s === reasignarForm.procedencia);
+    const destinoTab = salas.findIndex((s) => s === reasignarForm.sala);
+    if (origenTab === -1 || destinoTab === -1) {
+      setOpenReasignar(false);
+      return;
+    }
+
+    let pacienteOrigenKey = "";
+    let pacienteOrigen = null as (typeof filledData)[number][number] | null;
+
+    Object.entries(filledData[origenTab]).forEach(([key, paciente]) => {
+      if (
+        paciente.cama === reasignarForm.cama &&
+        paciente.sala === reasignarForm.procedencia
+      ) {
+        pacienteOrigenKey = key;
+        pacienteOrigen = paciente;
+      }
+    });
+
+    // Si no se encuentra por cama, busca por sala y key
+    if (!pacienteOrigen) {
+      Object.entries(filledData[origenTab]).forEach(([key, paciente]) => {
+        if (paciente.sala === reasignarForm.procedencia) {
+          pacienteOrigenKey = key;
+          pacienteOrigen = paciente;
+        }
+      });
+    }
+
+    if (!pacienteOrigenKey || !pacienteOrigen) {
+      setOpenReasignar(false);
+      return;
+    }
+
+    setFilledData((prev) => {
+      const nuevo = { ...prev };
+      delete nuevo[origenTab][Number(pacienteOrigenKey)];
+      nuevo[destinoTab] = {
+        ...nuevo[destinoTab],
+        [reasignarForm.cama]: {
+          ...pacienteOrigen,
+          sala: reasignarForm.sala,
+          cama: reasignarForm.cama,
+          procedencia: reasignarForm.procedencia,
+          resumen: reasignarForm.resumen,
+        },
+      };
+      return nuevo;
+    });
+
     setOpenReasignar(false);
   };
 
@@ -656,7 +746,6 @@ const Camas: React.FC = () => {
                             )}{" "}
                             días de estadía
                           </Typography>
-                          // ...existing code...
                           <Box
                             sx={{
                               display: "grid",
@@ -734,8 +823,6 @@ const Camas: React.FC = () => {
                               />
                             </Button>
                           </Box>
-                          {/* Nuevo icono de reasignación centrado debajo de los iconos */}
-                          // ...existing code...
                         </Box>
                       </CardContent>
                       <CardContent sx={{ padding: "10px" }}>
@@ -796,7 +883,6 @@ const Camas: React.FC = () => {
                             )}{" "}
                             días de estadía
                           </Typography>
-                          // ...existing code...
                           <Box
                             sx={{
                               display: "grid",
@@ -870,7 +956,6 @@ const Camas: React.FC = () => {
                               Reasignar
                             </Button>
                           </Box>
-                          // ...existing code...
                         </Box>
                       </CardContent>
                     </Card>
@@ -1212,7 +1297,9 @@ const Camas: React.FC = () => {
       );
     }
 
-    // Para los otros tabs, layout normal
+    // Para EMERGENCIA, QUIRÓFANO, NEONATOS:
+    const camas = camasDisponibles[salas[selectedTab] as SalaKey];
+
     return (
       <Grid
         container
@@ -1221,10 +1308,10 @@ const Camas: React.FC = () => {
         direction="row"
         alignItems="stretch"
       >
-        {currentTabData.map((index) => {
-          const data = filledData[selectedTab]?.[index];
+        {camas.map((cama) => {
+          const data = filledData[selectedTab]?.[cama.value as string];
           return (
-            <Grid item xs={12} key={index}>
+            <Grid item xs={12} key={cama.value}>
               {data ? (
                 <Card
                   className="camas-card"
@@ -1247,7 +1334,7 @@ const Camas: React.FC = () => {
                           fontSize: "1rem",
                         }}
                       >
-                        {data.cama}
+                        {cama.label}
                       </Typography>
                       <img
                         src={data.genderImage}
@@ -1358,7 +1445,7 @@ const Camas: React.FC = () => {
               ) : (
                 <Card
                   className="camas-card-empty"
-                  onClick={() => handleOpenDialog(index)}
+                  onClick={() => handleOpenDialog(cama.value)}
                   sx={{ minWidth: 180, maxWidth: 220 }}
                 >
                   <CardContent sx={{ padding: "10px" }}>
@@ -1369,7 +1456,7 @@ const Camas: React.FC = () => {
                       className="camas-card-empty-text"
                       sx={{ fontSize: "0.9rem" }}
                     >
-                      {`CAMA ${index + 1}`}
+                      {cama.label}
                     </Typography>
                   </CardContent>
                 </Card>
