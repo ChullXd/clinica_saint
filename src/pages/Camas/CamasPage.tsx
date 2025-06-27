@@ -24,9 +24,11 @@ import "./Camas.css";
 import Hospitalizacion from "./Hopitalizacion/Hospitalizacion";
 import IngresoPaciente from "./IngresoPaciente";
 import ReasignacionCama from "./ReasignacionCama";
+import AltaMedicaForm from "./AltaMedicaForm";
 
 const Camas: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [openAltaMedica, setOpenAltaMedica] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [formData, setFormData] = useState({
@@ -68,10 +70,7 @@ const Camas: React.FC = () => {
   };
 
   const [filledData, setFilledData] = useState<
-    Record<
-      number,
-      Record<string | number, PacienteData>
-    >
+    Record<number, Record<string | number, PacienteData>>
   >({ 0: {}, 1: {}, 2: {}, 3: {}, 4: {} });
 
   const [openReasignar, setOpenReasignar] = useState(false);
@@ -433,7 +432,10 @@ const Camas: React.FC = () => {
                               mx: "auto",
                             }}
                           >
-                            <IconButton title="Alta Médica">
+                            <IconButton
+                              title="Alta Médica"
+                              onClick={() => setOpenAltaMedica(true)}
+                            >
                               <img
                                 src={AltaMedica}
                                 alt="Alta Médica"
@@ -566,7 +568,10 @@ const Camas: React.FC = () => {
                               mx: "auto",
                             }}
                           >
-                            <IconButton title="Alta Médica">
+                            <IconButton
+                              title="Alta Médica"
+                              onClick={() => setOpenAltaMedica(true)}
+                            >
                               <img
                                 src={AltaMedica}
                                 alt="Alta Médica"
@@ -625,13 +630,7 @@ const Camas: React.FC = () => {
                                   resumen: "",
                                 });
                               }}
-                            >
-                              <img
-                                src={Reasignacion}
-                                alt="Reasignación"
-                                style={{ width: "32px", height: "32px" }}
-                              />
-                            </Button>
+                            ></Button>
                           </Box>
                         </Box>
                       </CardContent>
@@ -756,7 +755,10 @@ const Camas: React.FC = () => {
                               mx: "auto",
                             }}
                           >
-                            <IconButton title="Alta Médica">
+                            <IconButton
+                              title="Alta Médica"
+                              onClick={() => setOpenAltaMedica(true)}
+                            >
                               <img
                                 src={AltaMedica}
                                 alt="Alta Médica"
@@ -815,13 +817,7 @@ const Camas: React.FC = () => {
                                   resumen: "",
                                 });
                               }}
-                            >
-                              <img
-                                src={Reasignacion}
-                                alt="Reasignación"
-                                style={{ width: "32px", height: "32px" }}
-                              />
-                            </Button>
+                            ></Button>
                           </Box>
                         </Box>
                       </CardContent>
@@ -893,7 +889,10 @@ const Camas: React.FC = () => {
                               mx: "auto",
                             }}
                           >
-                            <IconButton title="Alta Médica">
+                            <IconButton
+                              title="Alta Médica"
+                              onClick={() => setOpenAltaMedica(true)}
+                            >
                               <img
                                 src={AltaMedica}
                                 alt="Alta Médica"
@@ -1071,7 +1070,10 @@ const Camas: React.FC = () => {
                               mx: "auto",
                             }}
                           >
-                            <IconButton title="Alta Médica">
+                            <IconButton
+                              title="Alta Médica"
+                              onClick={() => setOpenAltaMedica(true)}
+                            >
                               <img
                                 src={AltaMedica}
                                 alt="Alta Médica"
@@ -1204,7 +1206,10 @@ const Camas: React.FC = () => {
                               mx: "auto",
                             }}
                           >
-                            <IconButton title="Alta Médica">
+                            <IconButton
+                              title="Alta Médica"
+                              onClick={() => setOpenAltaMedica(true)}
+                            >
                               <img
                                 src={AltaMedica}
                                 alt="Alta Médica"
@@ -1376,7 +1381,10 @@ const Camas: React.FC = () => {
                           mx: "auto",
                         }}
                       >
-                        <IconButton title="Alta Médica">
+                        <IconButton
+                          title="Alta Médica"
+                          onClick={() => setOpenAltaMedica(true)}
+                        >
                           <img
                             src={AltaMedica}
                             alt="Alta Médica"
@@ -1534,6 +1542,10 @@ const Camas: React.FC = () => {
           handleReasignar={handleReasignar}
           camasDisponibles={camasDisponibles}
           salas={salas}
+        />
+        <AltaMedicaForm
+          open={openAltaMedica}
+          onClose={() => setOpenAltaMedica(false)}
         />
       </div>
     </div>
