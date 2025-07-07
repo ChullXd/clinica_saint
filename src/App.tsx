@@ -8,6 +8,7 @@ import ReservationTabs from "./pages/Programacion/Preadmision/ReservationTabs";
 import AgendaVirtual from "./pages/Programacion/AgendaVirtual/AgendaVirtual";
 import { useNavigate } from "react-router-dom";
 import Camas from "./pages/Camas/CamasPage";
+import Admision from "./pages/Facturacion/Admision/Admision";
 
 const theme = createTheme();
 
@@ -131,7 +132,9 @@ const App: React.FC = () => {
       case "AGENDA VIRTUAL":
         return <AgendaVirtual />;
       case "CAMAS":
-        return <Camas />; // Render Camas component when "CAMAS" is selected
+        return <Camas />;
+      case "ADMISION":
+        return <Admision />; // <-- Agrega esta línea
       default:
         return <Typography>Selecciona una opción del menú</Typography>;
     }
@@ -168,7 +171,11 @@ const App: React.FC = () => {
                 <PersonIcon />
                 <Typography variant="body2">User Admin</Typography>
               </UserProfile>
-              <Button variant="contained" color="primary" onClick={handleLogout}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleLogout}
+              >
                 Logout
               </Button>
             </Box>
@@ -181,9 +188,7 @@ const App: React.FC = () => {
               isSmallLogo={isSmallLogo}
               sidebarListRef={sidebarListRef}
             />
-            <MainContent>
-              {renderContent()}
-            </MainContent>
+            <MainContent>{renderContent()}</MainContent>
           </MainContainer>
         </Box>
       </GlobalStyles>

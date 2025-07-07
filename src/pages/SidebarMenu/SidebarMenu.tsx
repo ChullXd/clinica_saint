@@ -130,7 +130,8 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
   sidebarListRef,
 }) => {
   const [openProgramacion, setOpenProgramacion] = useState(false);
-  const [openServiciosAmbulatorios, setOpenServiciosAmbulatorios] = useState(false);
+  const [openServiciosAmbulatorios, setOpenServiciosAmbulatorios] =
+    useState(false);
   const [openHospitalario, setOpenHospitalario] = useState(false);
   const [openFacturacion, setOpenFacturacion] = useState(false);
   const [openFarmacia, setOpenFarmacia] = useState(false);
@@ -138,7 +139,8 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
   const [openSeguridad, setOpenSeguridad] = useState(false);
 
   const handleProgramacionClick = () => setOpenProgramacion(!openProgramacion);
-  const handleServiciosClick = () => setOpenServiciosAmbulatorios(!openServiciosAmbulatorios);
+  const handleServiciosClick = () =>
+    setOpenServiciosAmbulatorios(!openServiciosAmbulatorios);
   const handleHospitalarioClick = () => setOpenHospitalario(!openHospitalario);
   const handleFacturacionClick = () => setOpenFacturacion(!openFacturacion);
   const handleFarmaciaClick = () => setOpenFarmacia(!openFarmacia);
@@ -172,7 +174,10 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
 
           <StyledListItemButton
             onClick={handleProgramacionClick}
-            selected={selectedPage === "PREADMISION" || selectedPage === "AGENDA VIRTUAL"}
+            selected={
+              selectedPage === "PREADMISION" ||
+              selectedPage === "AGENDA VIRTUAL"
+            }
           >
             <ListItemIcon>
               <EventIcon />
@@ -247,7 +252,10 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
 
           <StyledListItemButton
             onClick={handleHospitalarioClick}
-            selected={selectedPage === "CAMAS" || selectedPage === "REPORTE HISTORIA CLINICA"}
+            selected={
+              selectedPage === "CAMAS" ||
+              selectedPage === "REPORTE HISTORIA CLINICA"
+            }
           >
             <ListItemIcon>
               <LocalHospitalIcon />
@@ -357,7 +365,9 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
               </StyledListItemButton>
               <StyledListItemButton
                 sx={{ pl: 4 }}
-                onClick={() => handlePageSelect("AUTORIZACION (CREDITO / DESCUENTO)")}
+                onClick={() =>
+                  handlePageSelect("AUTORIZACION (CREDITO / DESCUENTO)")
+                }
                 selected={selectedPage === "AUTORIZACION (CREDITO / DESCUENTO)"}
               >
                 <ListItemIcon>
@@ -626,7 +636,11 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
 
           <StyledListItemButton
             onClick={handleSeguridadClick}
-            selected={selectedPage === "USUARIOS" || selectedPage === "PERFILES" || selectedPage === "AUDITORIA"}
+            selected={
+              selectedPage === "USUARIOS" ||
+              selectedPage === "PERFILES" ||
+              selectedPage === "AUDITORIA"
+            }
           >
             <ListItemIcon>
               <SecurityIcon />
