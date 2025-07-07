@@ -1548,7 +1548,7 @@ const Camas: React.FC = () => {
           onClose={() => setOpenAltaMedica(false)}
         />
       </div>
-    </div>
+    </div>    
   );
 };
 
