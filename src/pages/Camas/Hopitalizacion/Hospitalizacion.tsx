@@ -6,6 +6,7 @@ import {
   Typography,
   IconButton,
   Box,
+  Divider,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -14,8 +15,8 @@ interface HospitalizacionProps {
   filledData: Record<number, any>;
   handleOpenDialog: (index: number) => void;
   calculateDays: (admissionDate: string, dischargeDate?: string) => number;
-  setOpenReasignar: (open: boolean) => void; // NUEVO
-  setReasignarForm: (form: any) => void; // NUEVO
+  setOpenReasignar: (open: boolean) => void;
+  setReasignarForm: (form: any) => void;
 }
 
 const getHospitalizacionCamaLabel = (index: number) => {
@@ -59,206 +60,163 @@ const getHospitalizacionCamaLabel = (index: number) => {
   }
 };
 
+// Función para verificar si una cama es compartida (tiene letra)
+const esCamaCompartida = (index: number) => {
+  return [2, 3, 4, 6, 7, 8].includes(index); // 3A, 3B, 3C, 5A, 5B, 5C
+};
+
+// Renderizar una cama individual
+const renderCama = (
+  index: number,
+  data: any,
+  handleOpenDialog: (index: number) => void
+) => (
+  <Grid item xs={12} sm={6} md={4} lg={3} key={index} sx={{ maxWidth: 220 }}>
+    {data ? (
+      <Card className="camas-card" sx={{ minWidth: 180, maxWidth: 220 }}>
+        <CardContent sx={{ padding: "10px" }}>
+          <Box
+            sx={{
+              backgroundColor: "#E6F0FA",
+              borderRadius: "8px",
+              padding: "6px",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                color: "#1A3C6D",
+                fontWeight: "bold",
+                fontSize: "1rem",
+              }}
+            >
+              {getHospitalizacionCamaLabel(index)}
+            </Typography>
+            {/* Aquí iría el resto del contenido del paciente */}
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              {data.pacienteNombre || "Paciente"}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {data.fechaIngreso || "Fecha ingreso"}
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    ) : (
+      <Card
+        className="camas-card-empty"
+        onClick={() => handleOpenDialog(index)}
+        sx={{
+          minWidth: 180,
+          maxWidth: 220,
+          cursor: "pointer",
+          "&:hover": {
+            backgroundColor: "#f5f5f5",
+          },
+        }}
+      >
+        <CardContent sx={{ padding: "10px", textAlign: "center" }}>
+          <IconButton color="primary">
+            <AddIcon />
+          </IconButton>
+          <Typography
+            className="camas-card-empty-text"
+            sx={{ fontSize: "0.9rem", mt: 1 }}
+          >
+            {getHospitalizacionCamaLabel(index)}
+          </Typography>
+        </CardContent>
+      </Card>
+    )}
+  </Grid>
+);
+
 const Hospitalizacion: React.FC<HospitalizacionProps> = ({
   patientData,
   filledData,
   handleOpenDialog,
 }) => {
-  const elements = [];
-  let i = 0;
-  while (i < patientData.length) {
-    if (i === 2) {
-      // Renderizar 3A, 3B, 3C en una fila
-      elements.push(
-        <Grid
-          container
-          spacing={2}
-          key="fila-3A-3B-3C"
-          sx={{ marginBottom: 2 }}
-        >
-          {[2, 3, 4].map((idx) => {
-            const data = filledData[idx];
-            return (
-              <Grid item xs={12} sm={4} md={4} key={idx} sx={{ maxWidth: 220 }}>
-                {data ? (
-                  <Card
-                    className="camas-card"
-                    sx={{ minWidth: 180, maxWidth: 220 }}
-                  >
-                    <CardContent sx={{ padding: "10px" }}>
-                      <Box
-                        sx={{
-                          backgroundColor: "#E6F0FA",
-                          borderRadius: "8px",
-                          padding: "6px",
-                          textAlign: "center",
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            color: "#1A3C6D",
-                            fontWeight: "bold",
-                            fontSize: "1rem",
-                          }}
-                        >
-                          {getHospitalizacionCamaLabel(idx)}
-                        </Typography>
-                        {/* ...resto del contenido del card... */}
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <Card
-                    className="camas-card-empty"
-                    onClick={() => handleOpenDialog(idx)}
-                    sx={{ minWidth: 180, maxWidth: 220 }}
-                  >
-                    <CardContent sx={{ padding: "10px" }}>
-                      <IconButton>
-                        <AddIcon />
-                      </IconButton>
-                      <Typography
-                        className="camas-card-empty-text"
-                        sx={{ fontSize: "0.9rem" }}
-                      >
-                        {getHospitalizacionCamaLabel(idx)}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                )}
-              </Grid>
-            );
-          })}
-        </Grid>
-      );
-      i += 3; // Saltar los índices 2, 3, 4
-    } else if (i === 6) {
-      // Renderizar 5A, 5B, 5C en una fila
-      elements.push(
-        <Grid
-          container
-          spacing={2}
-          key="fila-5A-5B-5C"
-          sx={{ marginBottom: 2 }}
-        >
-          {[6, 7, 8].map((idx) => {
-            const data = filledData[idx];
-            return (
-              <Grid item xs={12} sm={4} md={4} key={idx} sx={{ maxWidth: 220 }}>
-                {data ? (
-                  <Card
-                    className="camas-card"
-                    sx={{ minWidth: 180, maxWidth: 220 }}
-                  >
-                    <CardContent sx={{ padding: "10px" }}>
-                      <Box
-                        sx={{
-                          backgroundColor: "#E6F0FA",
-                          borderRadius: "8px",
-                          padding: "6px",
-                          textAlign: "center",
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            color: "#1A3C6D",
-                            fontWeight: "bold",
-                            fontSize: "1rem",
-                          }}
-                        >
-                          {getHospitalizacionCamaLabel(idx)}
-                        </Typography>
-                        {/* ...resto del contenido del card... */}
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <Card
-                    className="camas-card-empty"
-                    onClick={() => handleOpenDialog(idx)}
-                    sx={{ minWidth: 180, maxWidth: 220 }}
-                  >
-                    <CardContent sx={{ padding: "10px" }}>
-                      <IconButton>
-                        <AddIcon />
-                      </IconButton>
-                      <Typography
-                        className="camas-card-empty-text"
-                        sx={{ fontSize: "0.9rem" }}
-                      >
-                        {getHospitalizacionCamaLabel(idx)}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                )}
-              </Grid>
-            );
-          })}
-        </Grid>
-      );
-      i += 3; // Saltar los índices 6, 7, 8
-    } else {
-      const index = patientData[i];
-      const data = filledData[index];
-      elements.push(
-        <Grid container key={index} sx={{ marginBottom: 2 }}>
-          <Grid item xs={12} sx={{ maxWidth: 220 }}>
-            {data ? (
-              <Card
-                className="camas-card"
-                sx={{ minWidth: 180, maxWidth: 220 }}
-              >
-                <CardContent sx={{ padding: "10px" }}>
-                  <Box
-                    sx={{
-                      backgroundColor: "#E6F0FA",
-                      borderRadius: "8px",
-                      padding: "6px",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        color: "#1A3C6D",
-                        fontWeight: "bold",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      {getHospitalizacionCamaLabel(index)}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            ) : (
-              <Card
-                className="camas-card-empty"
-                onClick={() => handleOpenDialog(index)}
-                sx={{ minWidth: 180, maxWidth: 220 }}
-              >
-                <CardContent sx={{ padding: "10px" }}>
-                  <IconButton>
-                    <AddIcon />
-                  </IconButton>
-                  <Typography
-                    className="camas-card-empty-text"
-                    sx={{ fontSize: "0.9rem" }}
-                  >
-                    {getHospitalizacionCamaLabel(index)}
-                  </Typography>
-                </CardContent>
-              </Card>
+  // Separar camas individuales y compartidas
+  const camasIndividuales = patientData.filter(
+    (index) => !esCamaCompartida(index)
+  );
+  const camasCompartidas = patientData.filter((index) =>
+    esCamaCompartida(index)
+  );
+
+  // Agrupar camas compartidas por habitación
+  const habitacionesCompartidas = [
+    { nombre: "HABITACIÓN 3", camas: [2, 3, 4] }, // 3A, 3B, 3C
+    { nombre: "HABITACIÓN 5", camas: [6, 7, 8] }, // 5A, 5B, 5C
+  ];
+
+  return (
+    <Box>
+      {/* SECCIÓN DE CAMAS INDIVIDUALES */}
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 3,
+          fontWeight: "bold",
+          color: "#1A3C6D",
+          textAlign: "center",
+          borderBottom: "2px solid #1A3C6D",
+          paddingBottom: 1,
+        }}
+      >
+        CAMAS INDIVIDUALES
+      </Typography>
+
+      <Grid container spacing={2} sx={{ mb: 4 }}>
+        {camasIndividuales.map((index) =>
+          renderCama(index, filledData[index], handleOpenDialog)
+        )}
+      </Grid>
+
+      <Divider sx={{ my: 4, borderWidth: 2 }} />
+
+      {/* SECCIÓN DE CAMAS COMPARTIDAS */}
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 3,
+          fontWeight: "bold",
+          color: "#1A3C6D",
+          textAlign: "center",
+          borderBottom: "2px solid #1A3C6D",
+          paddingBottom: 1,
+        }}
+      >
+        HABITACIONES COMPARTIDAS
+      </Typography>
+
+      {habitacionesCompartidas.map((habitacion, idx) => (
+        <Box key={idx} sx={{ mb: 4 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 2,
+              fontWeight: "bold",
+              color: "#4A90E2",
+              textAlign: "center",
+              backgroundColor: "#E6F0FA",
+              padding: "8px",
+              borderRadius: "8px",
+            }}
+          >
+            {habitacion.nombre}
+          </Typography>
+
+          <Grid container spacing={2} justifyContent="center">
+            {habitacion.camas.map((index) =>
+              renderCama(index, filledData[index], handleOpenDialog)
             )}
           </Grid>
-        </Grid>
-      );
-      i += 1;
-    }
-  }
-
-  return <Box>{elements}</Box>;
+        </Box>
+      ))}
+    </Box>
+  );
 };
 
 export default Hospitalizacion;

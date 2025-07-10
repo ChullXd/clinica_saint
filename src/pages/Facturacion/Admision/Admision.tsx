@@ -262,7 +262,7 @@ const Admision: React.FC = () => {
               </Select>
             </FormControl>
           </Grid>
-          {/* País (igual largo que Extranjero y Sexo) */}
+          {/* País */}
           <Grid item xs={12} sm={2}>
             <FormControl fullWidth size="small" sx={{ minWidth: 120 }}>
               <InputLabel>País</InputLabel>
@@ -273,7 +273,7 @@ const Admision: React.FC = () => {
             </FormControl>
           </Grid>
           {/* Provincia */}
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={2}>
             <FormControl {...formControlProps}>
               <InputLabel>Provincia Reside</InputLabel>
               <Select label="Provincia Reside" {...selectProps}>
@@ -283,12 +283,25 @@ const Admision: React.FC = () => {
             </FormControl>
           </Grid>
           {/* Cantón */}
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={2}>
             <FormControl {...formControlProps}>
               <InputLabel>Cantón Reside</InputLabel>
               <Select label="Cantón Reside" {...selectProps}>
                 <MenuItem value="GUAYAQUIL">Guayaquil</MenuItem>
                 <MenuItem value="OTRO">Otro</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          {/* Estado Civil */}
+          <Grid item xs={12} sm={2}>
+            <FormControl {...formControlProps}>
+              <InputLabel>Estado Civil</InputLabel>
+              <Select label="Estado Civil" {...selectProps}>
+                {estadosCiviles.map((estado) => (
+                  <MenuItem key={estado} value={estado}>
+                    {estado}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>

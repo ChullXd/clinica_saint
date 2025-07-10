@@ -9,6 +9,8 @@ import AgendaVirtual from "./pages/Programacion/AgendaVirtual/AgendaVirtual";
 import { useNavigate } from "react-router-dom";
 import Camas from "./pages/Camas/CamasPage";
 import Admision from "./pages/Facturacion/Admision/Admision";
+import TarifarioMenu from "./pages/Facturacion/Tarifario/TarifarioMenu";
+import ServiciosAmbulatorio from "./pages/ServiciosAmbulatorios/ServiciosAmbulatorio";
 
 const theme = createTheme();
 
@@ -135,6 +137,10 @@ const App: React.FC = () => {
         return <Camas />;
       case "ADMISION":
         return <Admision />; // <-- Agrega esta línea
+      case "TARIFARIO":
+        return <TarifarioMenu />; // <-- Agrega esta línea
+      case "SERVICIOS AMBULATORIOS":
+        return <ServiciosAmbulatorio />; // <-- Agrega esta línea
       default:
         return <Typography>Selecciona una opción del menú</Typography>;
     }

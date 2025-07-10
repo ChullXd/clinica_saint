@@ -301,8 +301,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
             onClick={handleFacturacionClick}
             selected={
               selectedPage === "ADMISION" ||
-              selectedPage === "TARIFARIO DE SERVICIOS" ||
-              selectedPage === "TARIFARIO DE CONVENIO" ||
+              selectedPage === "TARIFARIO" ||
               selectedPage === "AUTORIZACION (CREDITO / DESCUENTO)" ||
               selectedPage === "CAJA (FACTURACION)" ||
               selectedPage === "ANULACION DE DOCUMENTO" ||
@@ -339,27 +338,14 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
               </StyledListItemButton>
               <StyledListItemButton
                 sx={{ pl: 4 }}
-                onClick={() => handlePageSelect("TARIFARIO DE SERVICIOS")}
-                selected={selectedPage === "TARIFARIO DE SERVICIOS"}
+                onClick={() => handlePageSelect("TARIFARIO")}
+                selected={selectedPage === "TARIFARIO"}
               >
                 <ListItemIcon>
                   <ReceiptIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="TARIFARIO DE SERVICIOS"
-                  primaryTypographyProps={{ fontSize: "14px" }}
-                />
-              </StyledListItemButton>
-              <StyledListItemButton
-                sx={{ pl: 4 }}
-                onClick={() => handlePageSelect("TARIFARIO DE CONVENIO")}
-                selected={selectedPage === "TARIFARIO DE CONVENIO"}
-              >
-                <ListItemIcon>
-                  <ReceiptIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="TARIFARIO DE CONVENIO"
+                  primary="TARIFARIO"
                   primaryTypographyProps={{ fontSize: "14px" }}
                 />
               </StyledListItemButton>

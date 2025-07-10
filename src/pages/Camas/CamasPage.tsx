@@ -25,10 +25,16 @@ import Hospitalizacion from "./Hopitalizacion/Hospitalizacion";
 import IngresoPaciente from "./IngresoPaciente";
 import ReasignacionCama from "./ReasignacionCama";
 import AltaMedicaForm from "./AltaMedicaForm";
+import InsumosForm from "./Insumos";
+import ServiciosInternosForm from "./ServiciosInternos";
+import OrdenesExamenesForm from "./OrdenesExamenes/OrdenesExamenes";
 
 const Camas: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [openAltaMedica, setOpenAltaMedica] = useState(false);
+  const [openInsumos, setOpenInsumos] = useState(false);
+  const [openServicios, setOpenServicios] = useState(false);
+  const [openOrdenExamen, setOpenOrdenExamen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [formData, setFormData] = useState({
@@ -456,21 +462,30 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Servicios Internos">
+                            <IconButton
+                              title="Servicios Internos"
+                              onClick={() => setOpenServicios(true)}
+                            >
                               <img
                                 src={ServiciosInternos}
                                 alt="Servicios Internos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Insumos">
+                            <IconButton
+                              title="Insumos"
+                              onClick={() => setOpenInsumos(true)}
+                            >
                               <img
                                 src={CargaInsumos}
                                 alt="Insumos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Orden de Examen">
+                            <IconButton
+                              title="Orden de Examen"
+                              onClick={() => setOpenOrdenExamen(true)}
+                            >
                               <img
                                 src={OrdenExamen}
                                 alt="Orden de Examen"
@@ -592,21 +607,30 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Servicios Internos">
+                            <IconButton
+                              title="Servicios Internos"
+                              onClick={() => setOpenServicios(true)}
+                            >
                               <img
                                 src={ServiciosInternos}
                                 alt="Servicios Internos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Insumos">
+                            <IconButton
+                              title="Insumos"
+                              onClick={() => setOpenInsumos(true)}
+                            >
                               <img
                                 src={CargaInsumos}
                                 alt="Insumos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Orden de Examen">
+                            <IconButton
+                              title="Orden de Examen"
+                              onClick={() => setOpenOrdenExamen(true)}
+                            >
                               <img
                                 src={OrdenExamen}
                                 alt="Orden de Examen"
@@ -779,21 +803,30 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Servicios Internos">
+                            <IconButton
+                              title="Servicios Internos"
+                              onClick={() => setOpenServicios(true)}
+                            >
                               <img
                                 src={ServiciosInternos}
                                 alt="Servicios Internos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Insumos">
+                            <IconButton
+                              title="Insumos"
+                              onClick={() => setOpenInsumos(true)}
+                            >
                               <img
                                 src={CargaInsumos}
                                 alt="Insumos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Orden de Examen">
+                            <IconButton
+                              title="Orden de Examen"
+                              onClick={() => setOpenOrdenExamen(true)}
+                            >
                               <img
                                 src={OrdenExamen}
                                 alt="Orden de Examen"
@@ -913,21 +946,30 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Servicios Internos">
+                            <IconButton
+                              title="Servicios Internos"
+                              onClick={() => setOpenServicios(true)}
+                            >
                               <img
                                 src={ServiciosInternos}
                                 alt="Servicios Internos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Insumos">
+                            <IconButton
+                              title="Insumos"
+                              onClick={() => setOpenInsumos(true)}
+                            >
                               <img
                                 src={CargaInsumos}
                                 alt="Insumos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Orden de Examen">
+                            <IconButton
+                              title="Orden de Examen"
+                              onClick={() => setOpenOrdenExamen(true)}
+                            >
                               <img
                                 src={OrdenExamen}
                                 alt="Orden de Examen"
@@ -1094,21 +1136,30 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Servicios Internos">
+                            <IconButton
+                              title="Servicios Internos"
+                              onClick={() => setOpenServicios(true)}
+                            >
                               <img
                                 src={ServiciosInternos}
                                 alt="Servicios Internos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Insumos">
+                            <IconButton
+                              title="Insumos"
+                              onClick={() => setOpenInsumos(true)}
+                            >
                               <img
                                 src={CargaInsumos}
                                 alt="Insumos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Orden de Examen">
+                            <IconButton
+                              title="Orden de Examen"
+                              onClick={() => setOpenOrdenExamen(true)}
+                            >
                               <img
                                 src={OrdenExamen}
                                 alt="Orden de Examen"
@@ -1230,21 +1281,30 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Servicios Internos">
+                            <IconButton
+                              title="Servicios Internos"
+                              onClick={() => setOpenServicios(true)}
+                            >
                               <img
                                 src={ServiciosInternos}
                                 alt="Servicios Internos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Insumos">
+                            <IconButton
+                              title="Insumos"
+                              onClick={() => setOpenInsumos(true)}
+                            >
                               <img
                                 src={CargaInsumos}
                                 alt="Insumos"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Orden de Examen">
+                            <IconButton
+                              title="Orden de Examen"
+                              onClick={() => setOpenOrdenExamen(true)}
+                            >
                               <img
                                 src={OrdenExamen}
                                 alt="Orden de Examen"
@@ -1405,21 +1465,30 @@ const Camas: React.FC = () => {
                             style={{ width: "24px", height: "24px" }}
                           />
                         </IconButton>
-                        <IconButton title="Servicios Internos">
+                        <IconButton
+                          title="Servicios Internos"
+                          onClick={() => setOpenServicios(true)}
+                        >
                           <img
                             src={ServiciosInternos}
                             alt="Servicios Internos"
                             style={{ width: "24px", height: "24px" }}
                           />
                         </IconButton>
-                        <IconButton title="Insumos">
+                        <IconButton
+                          title="Insumos"
+                          onClick={() => setOpenInsumos(true)}
+                        >
                           <img
                             src={CargaInsumos}
                             alt="Insumos"
                             style={{ width: "24px", height: "24px" }}
                           />
                         </IconButton>
-                        <IconButton title="Orden de Examen">
+                        <IconButton
+                          title="Orden de Examen"
+                          onClick={() => setOpenOrdenExamen(true)}
+                        >
                           <img
                             src={OrdenExamen}
                             alt="Orden de Examen"
@@ -1547,8 +1616,17 @@ const Camas: React.FC = () => {
           open={openAltaMedica}
           onClose={() => setOpenAltaMedica(false)}
         />
+        <InsumosForm open={openInsumos} onClose={() => setOpenInsumos(false)} />
+        <ServiciosInternosForm
+          open={openServicios}
+          onClose={() => setOpenServicios(false)}
+        />
+        <OrdenesExamenesForm
+          open={openOrdenExamen}
+          onClose={() => setOpenOrdenExamen(false)}
+        />
       </div>
-    </div>    
+    </div>
   );
 };
 
