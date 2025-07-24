@@ -12,7 +12,7 @@ import {
 import EmergenciaHC from "./Emergencia/EmergenciaHC";
 import AnamnesisHC from "./Anamnesis/AnamnesisHC";
 import Evolucion from "./Evolucion/Evolucion";
-import ProtocoloQuirurgico from "./ProtocoloQuirurgico/Protocolo Quirúrgico";
+import ProtocoloQuirurgico from "./ProtocoloQuirurgico/ProtocoloQuirurgico";
 import ProtocoloAnestesiologo from "./ProtocoloAnestesiologo/ProtocoloAnestesiologo";
 
 

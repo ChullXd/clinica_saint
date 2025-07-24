@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Box,
@@ -14,11 +13,16 @@ import {
   Print as PrintIcon,
   Edit as EditIcon,
 } from "@mui/icons-material";
-import DatosEstablecimiento from "./DatosEstablecimiento/DatosEstablecimiento";
-import PrioridadAtencion from "./PrioridadAtencion/PrioridadAtencion";
 
 // Importar los componentes de formularios existentes
-
+import DatosGeneralesForm from "./DatosGenerales/DatosGeneralesForm";
+import EquipoQuirurgicoForm from "./EquipoQuirurgico/EquipoQuirurgicoForm";
+import Diagnostico from "./Diagnostico/Diagnostico";
+import TiemposQuirurgicosForm from "./TiemposQuirurgicos/TiemposQuirurgicosForm";
+import ComplicacionesForm from "./Complicaciones/ComplicacionesForm";
+import ExamenesHispForm from "./ExamenesHispatologicos/ExamenesHispForm";
+import DiagramaProcedimiento from "./Diagrama/DiagramaProcedimiento";
+import DatosProfesional from "./ProfecionalResponsable/Responsable";
 
 // Interfaz para las propiedades del panel de pestañas
 interface TabPanelProps {
@@ -52,7 +56,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function ProtocoloAnestesiologo() {
+export default function ProtocoloQuirurgico() {
   // Estado para controlar la pestaña activa
   const [tabValue, setTabValue] = useState(0);
 
@@ -73,7 +77,7 @@ export default function ProtocoloAnestesiologo() {
           textAlign: "center",
         }}
       >
-        PROTOCOLO ANESTESIÓLOGO
+        PROTOCOLO QUIRÚRGICO
       </Typography>
       <Typography variant="subtitle2" align="center" color="text.secondary" sx={{ mb: 2 }}>
         MSP / HCU-Form. 022 / 2008
@@ -98,8 +102,8 @@ export default function ProtocoloAnestesiologo() {
             },
           }}
         >
-          <Tab label="DATOS DEL ESTABLECIMIENTO" {...a11yProps(0)} />
-          <Tab label="SERVICIO Y PRIORIDAD DE ATENCIÓN" {...a11yProps(1)} />
+          <Tab label="DATOS GENERALES" {...a11yProps(0)} />
+          <Tab label="DIAGNÓSTICOS" {...a11yProps(1)} />
           <Tab label="EQUIPO QUIRÚRGICO" {...a11yProps(2)} />
           <Tab label="TIEMPOS QUIRÚRGICOS" {...a11yProps(3)} />
           <Tab label="COMPLICACIONES" {...a11yProps(4)} />
@@ -111,13 +115,11 @@ export default function ProtocoloAnestesiologo() {
 
       {/* Contenido de las pestañas */}
       <TabPanel value={tabValue} index={0}>
-        <DatosEstablecimiento />
+        <DatosGeneralesForm />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={1}>
-        <PrioridadAtencion />
-      </TabPanel>
-      {/* <TabPanel value={tabValue} index={2}>
+
+      <TabPanel value={tabValue} index={2}>
         <EquipoQuirurgicoForm />
       </TabPanel>
 
@@ -145,7 +147,7 @@ export default function ProtocoloAnestesiologo() {
 
       <TabPanel value={tabValue} index={7}>
         <DatosProfesional />
-      </TabPanel> */}
+      </TabPanel>
 
       {/* Botones de acción */}
       <Divider sx={{ mt: 4, mb: 2 }} />
