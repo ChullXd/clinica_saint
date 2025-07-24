@@ -9,16 +9,16 @@ import {
   Tab,
   Button,
 } from "@mui/material";
-import Laboratorio from "./Laboratorio/Laboratorio";
-import Imagenologia from "./Imagenologia/Imagenologia";
-import AnatomiaPatologica from "./AnatomiaPatologica/AnatomiaPatologica";
+import HospitalizacionSV from "./SinosVitalesHospitalizacion/HospitalizacionSV";
+import BalanceHidrico from "./SignosVitalesBalanceHidrico/BalanceHidrico";
+
 
 interface OrdenesProps {
   open: boolean;
   onClose: () => void;
 }
 
-const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
+ export const EnfermeriaMenu: React.FC<OrdenesProps> = ({ open, onClose }) => {
   const [value, setValue] = useState(0);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -37,7 +37,7 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
           py: 2,
         }}
       >
-        Órdenes de Exámenes
+        ENFERMERIA
       </DialogTitle>
       <DialogContent
         sx={{
@@ -65,15 +65,14 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
               },
             }}
           >
-            <Tab label="Laboratorio" />
-            <Tab label="Imagenología" />
-            <Tab label="Anatomía Patológica" />
+            <Tab label="SV BALANCE CLINICO" />
+            <Tab label="SV HOSPITALIZACION" />
           </Tabs>
         </Box>
         <Box sx={{ minHeight: "400px" }}>
-          {value === 0 && <Laboratorio />}
-          {value === 1 && <Imagenologia />}
-          {value === 2 && <AnatomiaPatologica />}
+          {value === 0 && <BalanceHidrico />}
+          {value === 1 && <HospitalizacionSV />}
+          {/* {value === 2 && <AnatomiaPatologica />} */}
         </Box>
       </DialogContent>
       <DialogActions sx={{ background: "#F4F8FB", pb: 2, pt: 1 }}>
@@ -96,4 +95,3 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
   );
 };
 
-export default OrdenesExamenesForm;

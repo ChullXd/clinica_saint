@@ -28,13 +28,17 @@ import AltaMedicaForm from "./AltaMedicaForm";
 import InsumosForm from "./Insumos";
 import ServiciosInternosForm from "./ServiciosInternos";
 import OrdenesExamenesForm from "./OrdenesExamenes/OrdenesExamenes";
+import { EnfermeriaMenu } from "./Enfermeria/Enfermeria";
+import { HistoriaClinicaForm } from "./Historia Clinica/HistoriaClinica";
 
 const Camas: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [openAltaMedica, setOpenAltaMedica] = useState(false);
   const [openInsumos, setOpenInsumos] = useState(false);
+  const [openEnfermeria, setOpenEnfermeria] = useState(false);
   const [openServicios, setOpenServicios] = useState(false);
   const [openOrdenExamen, setOpenOrdenExamen] = useState(false);
+  const [openHistoriaClinica, setOpenHistoriaClinica] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [formData, setFormData] = useState({
@@ -448,14 +452,20 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Historia Clínica">
+                            <IconButton
+                              title="Historia Clínica"
+                              onClick={() => setOpenHistoriaClinica(true)}
+                            >
                               <img
                                 src={HistoriaClinica}
                                 alt="Historia Clínica"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Enfermería">
+                            <IconButton
+                              title="Enfermería"
+                              onClick={() => setOpenEnfermeria(true)}
+                            >
                               <img
                                 src={Enfermeria}
                                 alt="Enfermería"
@@ -593,14 +603,20 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Historia Clínica">
+                            <IconButton
+                              title="Historia Clínica"
+                              onClick={() => setOpenHistoriaClinica(true)}
+                            >
                               <img
                                 src={HistoriaClinica}
                                 alt="Historia Clínica"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Enfermería">
+                            <IconButton
+                              title="Enfermería"
+                              onClick={() => setOpenEnfermeria(true)}
+                            >
                               <img
                                 src={Enfermeria}
                                 alt="Enfermería"
@@ -789,14 +805,20 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Historia Clínica">
+                            <IconButton
+                              title="Historia Clínica"
+                              onClick={() => setOpenHistoriaClinica(true)}
+                            >
                               <img
                                 src={HistoriaClinica}
                                 alt="Historia Clínica"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Enfermería">
+                            <IconButton
+                              title="Enfermería"
+                              onClick={() => setOpenEnfermeria(true)}
+                            >
                               <img
                                 src={Enfermeria}
                                 alt="Enfermería"
@@ -932,14 +954,20 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Historia Clínica">
+                            <IconButton
+                              title="Historia Clínica"
+                              onClick={() => setOpenHistoriaClinica(true)}
+                            >
                               <img
                                 src={HistoriaClinica}
                                 alt="Historia Clínica"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Enfermería">
+                            <IconButton
+                              title="Enfermería"
+                              onClick={() => setOpenEnfermeria(true)}
+                            >
                               <img
                                 src={Enfermeria}
                                 alt="Enfermería"
@@ -1122,14 +1150,20 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Historia Clínica">
+                            <IconButton
+                              title="Historia Clínica"
+                              onClick={() => setOpenHistoriaClinica(true)}
+                            >
                               <img
                                 src={HistoriaClinica}
                                 alt="Historia Clínica"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Enfermería">
+                            <IconButton
+                              title="Enfermería"
+                              onClick={() => setOpenEnfermeria(true)}
+                            >
                               <img
                                 src={Enfermeria}
                                 alt="Enfermería"
@@ -1267,14 +1301,20 @@ const Camas: React.FC = () => {
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Historia Clínica">
+                            <IconButton
+                              title="Historia Clínica"
+                              onClick={() => setOpenHistoriaClinica(true)}
+                            >
                               <img
                                 src={HistoriaClinica}
                                 alt="Historia Clínica"
                                 style={{ width: "24px", height: "24px" }}
                               />
                             </IconButton>
-                            <IconButton title="Enfermería">
+                            <IconButton
+                              title="Enfermería"
+                              onClick={() => setOpenEnfermeria(true)}
+                            >
                               <img
                                 src={Enfermeria}
                                 alt="Enfermería"
@@ -1451,14 +1491,20 @@ const Camas: React.FC = () => {
                             style={{ width: "24px", height: "24px" }}
                           />
                         </IconButton>
-                        <IconButton title="Historia Clínica">
+                        <IconButton
+                          title="Historia Clínica"
+                          onClick={() => setOpenHistoriaClinica(true)}
+                        >
                           <img
                             src={HistoriaClinica}
                             alt="Historia Clínica"
                             style={{ width: "24px", height: "24px" }}
                           />
                         </IconButton>
-                        <IconButton title="Enfermería">
+                        <IconButton
+                          title="Enfermería"
+                          onClick={() => setOpenEnfermeria(true)}
+                        >
                           <img
                             src={Enfermeria}
                             alt="Enfermería"
@@ -1624,6 +1670,14 @@ const Camas: React.FC = () => {
         <OrdenesExamenesForm
           open={openOrdenExamen}
           onClose={() => setOpenOrdenExamen(false)}
+        />
+        <EnfermeriaMenu
+          open={openEnfermeria}
+          onClose={() => setOpenEnfermeria(false)}
+        />
+        <HistoriaClinicaForm
+          open={openHistoriaClinica}
+          onClose={() => setOpenHistoriaClinica(false)}
         />
       </div>
     </div>

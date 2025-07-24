@@ -9,16 +9,19 @@ import {
   Tab,
   Button,
 } from "@mui/material";
-import Laboratorio from "./Laboratorio/Laboratorio";
-import Imagenologia from "./Imagenologia/Imagenologia";
-import AnatomiaPatologica from "./AnatomiaPatologica/AnatomiaPatologica";
+import EmergenciaHC from "./Emergencia/EmergenciaHC";
+import AnamnesisHC from "./Anamnesis/AnamnesisHC";
+import Evolucion from "./Evolucion/Evolucion";
+import ProtocoloQuirurgico from "./ProtocoloQuirurgico/Protocolo Quirúrgico";
+import ProtocoloAnestesiologo from "./ProtocoloAnestesiologo/ProtocoloAnestesiologo";
+
 
 interface OrdenesProps {
   open: boolean;
   onClose: () => void;
 }
 
-const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
+ export const HistoriaClinicaForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
   const [value, setValue] = useState(0);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -37,7 +40,7 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
           py: 2,
         }}
       >
-        Órdenes de Exámenes
+        HISTORIA CLÍNICA
       </DialogTitle>
       <DialogContent
         sx={{
@@ -65,15 +68,19 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
               },
             }}
           >
-            <Tab label="Laboratorio" />
-            <Tab label="Imagenología" />
-            <Tab label="Anatomía Patológica" />
+            <Tab label="EMERGENCIA" />
+            <Tab label="ANAMNESIS" />
+            <Tab label="EVOLUCIÓN" />
+            <Tab label="PROTOCOLO QUIRÚRGICO" />
+            <Tab label="PROTOCOLO ANESTESIÓLOGO" />
           </Tabs>
         </Box>
         <Box sx={{ minHeight: "400px" }}>
-          {value === 0 && <Laboratorio />}
-          {value === 1 && <Imagenologia />}
-          {value === 2 && <AnatomiaPatologica />}
+          {value === 0 && <EmergenciaHC />}
+          {value === 1 && <AnamnesisHC />}
+          {value === 2 && <Evolucion />}
+          {value === 3 && <ProtocoloQuirurgico />}
+          {value === 4 && <ProtocoloAnestesiologo />}
         </Box>
       </DialogContent>
       <DialogActions sx={{ background: "#F4F8FB", pb: 2, pt: 1 }}>
@@ -96,4 +103,3 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
   );
 };
 
-export default OrdenesExamenesForm;
