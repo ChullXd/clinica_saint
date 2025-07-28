@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -7,12 +6,10 @@ import {
   Button,
   Card,
   CardContent,
-  Divider,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Chip,
   Alert,
   Snackbar,
   Dialog,
@@ -38,13 +35,14 @@ import {
   Print as PrintIcon,
   GetApp as ExportIcon,
   ExpandMore as ExpandMoreIcon,
-  Person as PersonIcon,
 } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import {
+  Assignment as FormIcon,
+} from "@mui/icons-material";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 // Interfaces
 interface DatosEstablecimiento {
@@ -305,17 +303,24 @@ export default function Evolucion() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Paper elevation={3} sx={{ p: 2, m: 2 }}>
-        <Typography
-          variant="h5"
-          sx={{
-            mb: 2,
-            fontWeight: "bold",
-            color: "#1A3C6D",
-            textAlign: "center",
-          }}
-        >
-          EVOLUCIÓN Y PRESCRIPCIONES
-        </Typography>
+
+        <Card sx={{ mb: 3, boxShadow: 3 }}>
+          <CardContent sx={{ p: 3 }}>
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "left" }}>
+              <FormIcon sx={{ fontSize: 36, color: "#1A3C6D", mr: 2 }} />
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: "bold",
+                  color: "#1A3C6D",
+                  textAlign: "center",
+                }}
+              >
+                FORMULARIO 005 MSP EVOLUCIÓN Y PRESCRIPCIONES
+              </Typography>
+            </Box>
+          </CardContent>
+        </Card>
 
         {/* A. DATOS DEL ESTABLECIMIENTO */}
         <Card sx={{ mb: 2 }}>
@@ -400,7 +405,7 @@ export default function Evolucion() {
                   InputProps={{ sx: { fontSize: "0.8rem" } }}
                 />
               </Box>
-           
+
               <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 32%" } }}>
                 <TextField
                   label="NÚMERO DE ARCHIVO"

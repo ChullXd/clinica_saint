@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import illustration from "/Clinica_Saint/clinica_saint/src/assets/png/LogoHorizontal.png"; // Ajusta la ruta
-import loos from "/Clinica_Saint/clinica_saint/src/assets/png/Logo1.png"; // Ajusta la ruta
+import illustration from "/clinica_saint/src/assets/png/LogoHorizontal.png"; // Ajusta la ruta
+import loos from "/clinica_saint/src/assets/png/Logo1.png"; // Ajusta la ruta
 
 const Login: React.FC = () => {
   const navigate = useNavigate();

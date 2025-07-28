@@ -12,14 +12,14 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import PacienteHombre from "/Clinica_Saint/clinica_saint/src/assets/png/PacienteHombre.png";
-import PacienteMujer from "/Clinica_Saint/clinica_saint/src/assets/png/PacienteMujer.png";
-import AltaMedica from "/Clinica_Saint/clinica_saint/src/assets/png/AltaMedica.png";
-import HistoriaClinica from "/Clinica_Saint/clinica_saint/src/assets/png/HistoriaClinica.png";
-import Enfermeria from "/Clinica_Saint/clinica_saint/src/assets/png/Enfermeria.png";
-import ServiciosInternos from "/Clinica_Saint/clinica_saint/src/assets/png/ServiciosInternos.png";
-import CargaInsumos from "/Clinica_Saint/clinica_saint/src/assets/png/CargaInsumos.png";
-import OrdenExamen from "/Clinica_Saint/clinica_saint/src/assets/png/OrdenExamen.png";
+import PacienteHombre from "/clinica_saint/src/assets/png/PacienteHombre.png";
+import PacienteMujer from "/clinica_saint/src/assets/png/PacienteMujer.png";
+import AltaMedica from "/clinica_saint/src/assets/png/AltaMedica.png";
+import HistoriaClinica from "/clinica_saint/src/assets/png/HistoriaClinica.png";
+import Enfermeria from "/clinica_saint/src/assets/png/Enfermeria.png";
+import ServiciosInternos from "/clinica_saint/src/assets/png/ServiciosInternos.png";
+import CargaInsumos from "/clinica_saint/src/assets/png/CargaInsumos.png";
+import OrdenExamen from "/clinica_saint/src/assets/png/OrdenExamen.png";
 import "./Camas.css";
 import Hospitalizacion from "./Hopitalizacion/Hospitalizacion";
 import IngresoPaciente from "./IngresoPaciente";
@@ -41,12 +41,20 @@ const Camas: React.FC = () => {
   const [openHistoriaClinica, setOpenHistoriaClinica] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [selectedPaciente, setSelectedPaciente] = useState<PacienteData | null>(null);
+  // Reemplaza el formData inicial (líneas aproximadamente 32-44)
   const [formData, setFormData] = useState({
     sala: "EMERGENCIA",
     cama: "",
+    primerNombre: "",        // NUEVO
+    segundoNombre: "",       // NUEVO
+    primerApellido: "",      // NUEVO
+    segundoApellido: "",     // NUEVO
     name: "",
     id: "",
     sex: "",
+    edad: "",                // NUEVO
+    fechaNacimiento: "",     // NUEVO
     admissionDate: "",
     dischargeDate: "",
     medicoTratante: { medico: false, clinica: false },
@@ -62,12 +70,19 @@ const Camas: React.FC = () => {
     Array.from({ length: 4 }, (_, i) => i), // POSTQUIRÚRGICO (4 camas)
     Array.from({ length: 3 }, (_, i) => i), // POSTQUIRÚRGICO (4 camas)
   ]);
+  // Reemplaza el tipo PacienteData (líneas aproximadamente 46-58)
   type PacienteData = {
     sala: string;
     cama: string;
+    primerNombre: string;    // NUEVO
+    segundoNombre: string;   // NUEVO
+    primerApellido: string;  // NUEVO
+    segundoApellido: string; // NUEVO
     name: string;
     id: string;
     sex: string;
+    edad: string;            // NUEVO
+    fechaNacimiento: string; // NUEVO
     genderImage: string;
     admissionDate: string;
     dischargeDate: string;
@@ -166,15 +181,22 @@ const Camas: React.FC = () => {
     setOpenDialog(true);
   };
 
+  // Reemplaza la función handleCloseDialog (líneas aproximadamente 155-170)
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedCard(null);
     setFormData({
       sala: "EMERGENCIA",
       cama: "",
+      primerNombre: "",        // NUEVO
+      segundoNombre: "",       // NUEVO
+      primerApellido: "",      // NUEVO
+      segundoApellido: "",     // NUEVO
       name: "",
       id: "",
       sex: "",
+      edad: "",                // NUEVO
+      fechaNacimiento: "",     // NUEVO
       admissionDate: "",
       dischargeDate: "",
       medicoTratante: { medico: false, clinica: false },
@@ -185,6 +207,7 @@ const Camas: React.FC = () => {
     });
   };
 
+  // Reemplaza la función handleInputChange (líneas aproximadamente 172-187)
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }
@@ -192,6 +215,10 @@ const Camas: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     const upperCaseFields = [
+      "primerNombre",          // NUEVO
+      "segundoNombre",         // NUEVO
+      "primerApellido",        // NUEVO
+      "segundoApellido",       // NUEVO
       "name",
       "id",
       "medicoAnestesiologo",
@@ -217,7 +244,7 @@ const Camas: React.FC = () => {
       [field]: { ...prev[field], [name]: checked },
     }));
   };
-
+  // Reemplaza la función handleSave (líneas aproximadamente 200-235)
   const handleSave = () => {
     if (selectedCard !== null && selectedTab === 0) {
       if (!formData.sex) {
@@ -225,11 +252,15 @@ const Camas: React.FC = () => {
         return;
       }
       const genderImage =
-        formData.sex === "Masculino"
+        formData.sex === "MASCULINO"
           ? PacienteHombre
-          : formData.sex === "Femenino"
-          ? PacienteMujer
-          : PacienteHombre;
+          : formData.sex === "FEMENINO"
+            ? PacienteMujer
+            : PacienteHombre;
+
+      // Crear nombre completo combinando los campos
+      const nombreCompleto = `${formData.primerNombre} ${formData.segundoNombre} ${formData.primerApellido} ${formData.segundoApellido}`.trim();
+
       setFilledData((prev) => ({
         ...prev,
         [selectedTab]: {
@@ -237,9 +268,15 @@ const Camas: React.FC = () => {
           [selectedCard]: {
             sala: formData.sala,
             cama: formData.cama,
-            name: formData.name,
+            primerNombre: formData.primerNombre,      // NUEVO
+            segundoNombre: formData.segundoNombre,    // NUEVO
+            primerApellido: formData.primerApellido,  // NUEVO
+            segundoApellido: formData.segundoApellido, // NUEVO
+            name: nombreCompleto,                     // ACTUALIZADO
             id: formData.id,
             sex: formData.sex,
+            edad: formData.edad,                      // NUEVO
+            fechaNacimiento: formData.fechaNacimiento, // NUEVO
             genderImage,
             admissionDate: formData.admissionDate,
             dischargeDate: formData.dischargeDate,
@@ -411,7 +448,7 @@ const Camas: React.FC = () => {
                               color: "#1A3C6D",
                             }}
                           >
-                            {data.name}
+                            {`${data.primerNombre} ${data.primerApellido}`}
                           </Typography>
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
@@ -421,16 +458,7 @@ const Camas: React.FC = () => {
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
                           >
-                            Fecha de Ingreso: {data.admissionDate}
-                          </Typography>
-                          <Typography
-                            sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
-                          >
-                            {calculateDays(
-                              data.admissionDate,
-                              data.dischargeDate
-                            )}{" "}
-                            días de estadía
+                            INGRESO: {data.admissionDate}
                           </Typography>
                           <Box
                             sx={{
@@ -444,7 +472,10 @@ const Camas: React.FC = () => {
                           >
                             <IconButton
                               title="Alta Médica"
-                              onClick={() => setOpenAltaMedica(true)}
+                              onClick={() => {
+                                setSelectedPaciente(data);
+                                setOpenAltaMedica(true);
+                              }}
                             >
                               <img
                                 src={AltaMedica}
@@ -562,27 +593,19 @@ const Camas: React.FC = () => {
                               color: "#1A3C6D",
                             }}
                           >
-                            {data.name}
+                            {`${data.primerNombre} ${data.primerApellido}`}
                           </Typography>
                           <Typography
-                            sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
+                            sx={{ fontSize: "0.8rem", color: "#494949ff" }}
                           >
                             H.C. {data.id}
                           </Typography>
                           <Typography
-                            sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
+                            sx={{ fontSize: "0.8rem", color: "#000000ff" }}
                           >
-                            Fecha de Ingreso: {data.admissionDate}
+                           INGRESO: {data.admissionDate}
                           </Typography>
-                          <Typography
-                            sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
-                          >
-                            {calculateDays(
-                              data.admissionDate,
-                              data.dischargeDate
-                            )}{" "}
-                            días de estadía
-                          </Typography>
+
                           <Box
                             sx={{
                               display: "grid",
@@ -595,7 +618,10 @@ const Camas: React.FC = () => {
                           >
                             <IconButton
                               title="Alta Médica"
-                              onClick={() => setOpenAltaMedica(true)}
+                              onClick={() => {
+                                setSelectedPaciente(data);
+                                setOpenAltaMedica(true);
+                              }}
                             >
                               <img
                                 src={AltaMedica}
@@ -764,7 +790,7 @@ const Camas: React.FC = () => {
                               color: "#1A3C6D",
                             }}
                           >
-                            {data.name}
+                            {`${data.primerNombre} ${data.primerApellido}`}
                           </Typography>
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
@@ -774,17 +800,9 @@ const Camas: React.FC = () => {
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
                           >
-                            Fecha de Ingreso: {data.admissionDate}
+                            INGRESO: {data.admissionDate}
                           </Typography>
-                          <Typography
-                            sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
-                          >
-                            {calculateDays(
-                              data.admissionDate,
-                              data.dischargeDate
-                            )}{" "}
-                            días de estadía
-                          </Typography>
+
                           <Box
                             sx={{
                               display: "grid",
@@ -797,7 +815,10 @@ const Camas: React.FC = () => {
                           >
                             <IconButton
                               title="Alta Médica"
-                              onClick={() => setOpenAltaMedica(true)}
+                              onClick={() => {
+                                setSelectedPaciente(data);
+                                setOpenAltaMedica(true);
+                              }}
                             >
                               <img
                                 src={AltaMedica}
@@ -913,7 +934,7 @@ const Camas: React.FC = () => {
                               color: "#1A3C6D",
                             }}
                           >
-                            {data.name}
+                            {`${data.primerNombre} ${data.primerApellido}`}
                           </Typography>
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
@@ -923,17 +944,9 @@ const Camas: React.FC = () => {
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
                           >
-                            Fecha de Ingreso: {data.admissionDate}
+                            INGRESO: {data.admissionDate}
                           </Typography>
-                          <Typography
-                            sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
-                          >
-                            {calculateDays(
-                              data.admissionDate,
-                              data.dischargeDate
-                            )}{" "}
-                            días de estadía
-                          </Typography>
+
                           <Box
                             sx={{
                               display: "grid",
@@ -946,7 +959,10 @@ const Camas: React.FC = () => {
                           >
                             <IconButton
                               title="Alta Médica"
-                              onClick={() => setOpenAltaMedica(true)}
+                              onClick={() => {
+                                setSelectedPaciente(data);
+                                setOpenAltaMedica(true);
+                              }}
                             >
                               <img
                                 src={AltaMedica}
@@ -1109,7 +1125,7 @@ const Camas: React.FC = () => {
                               color: "#1A3C6D",
                             }}
                           >
-                            {data.name}
+                            {`${data.primerNombre} ${data.primerApellido}`}
                           </Typography>
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
@@ -1119,16 +1135,7 @@ const Camas: React.FC = () => {
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
                           >
-                            Fecha de Ingreso: {data.admissionDate}
-                          </Typography>
-                          <Typography
-                            sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
-                          >
-                            {calculateDays(
-                              data.admissionDate,
-                              data.dischargeDate
-                            )}{" "}
-                            días de estadía
+                            INGRESO: {data.admissionDate}
                           </Typography>
                           <Box
                             sx={{
@@ -1142,7 +1149,10 @@ const Camas: React.FC = () => {
                           >
                             <IconButton
                               title="Alta Médica"
-                              onClick={() => setOpenAltaMedica(true)}
+                              onClick={() => {
+                                setSelectedPaciente(data);
+                                setOpenAltaMedica(true);
+                              }}
                             >
                               <img
                                 src={AltaMedica}
@@ -1260,7 +1270,7 @@ const Camas: React.FC = () => {
                               color: "#1A3C6D",
                             }}
                           >
-                            {data.name}
+                            {`${data.primerNombre} ${data.primerApellido}`}
                           </Typography>
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
@@ -1270,17 +1280,9 @@ const Camas: React.FC = () => {
                           <Typography
                             sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
                           >
-                            Fecha de Ingreso: {data.admissionDate}
+                            INGRESO: {data.admissionDate}
                           </Typography>
-                          <Typography
-                            sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}
-                          >
-                            {calculateDays(
-                              data.admissionDate,
-                              data.dischargeDate
-                            )}{" "}
-                            días de estadía
-                          </Typography>
+
                           <Box
                             sx={{
                               display: "grid",
@@ -1293,7 +1295,10 @@ const Camas: React.FC = () => {
                           >
                             <IconButton
                               title="Alta Médica"
-                              onClick={() => setOpenAltaMedica(true)}
+                              onClick={() => {
+                                setSelectedPaciente(data);
+                                setOpenAltaMedica(true);
+                              }}
                             >
                               <img
                                 src={AltaMedica}
@@ -1459,17 +1464,13 @@ const Camas: React.FC = () => {
                           color: "#1A3C6D",
                         }}
                       >
-                        {data.name}
+                        {`${data.primerNombre} ${data.primerApellido}`}
                       </Typography>
                       <Typography sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}>
                         H.C. {data.id}
                       </Typography>
                       <Typography sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}>
-                        Fecha de Ingreso: {data.admissionDate}
-                      </Typography>
-                      <Typography sx={{ fontSize: "0.8rem", color: "#4A4A4A" }}>
-                        {calculateDays(data.admissionDate, data.dischargeDate)}{" "}
-                        días de estadía
+                        INGRESO: {data.admissionDate}
                       </Typography>
                       <Box
                         sx={{
@@ -1660,7 +1661,11 @@ const Camas: React.FC = () => {
         />
         <AltaMedicaForm
           open={openAltaMedica}
-          onClose={() => setOpenAltaMedica(false)}
+          onClose={() => {
+            setOpenAltaMedica(false);
+            setSelectedPaciente(null); // Keep this as null for your state
+          }}
+          pacienteData={selectedPaciente || undefined} // Convert null to undefined
         />
         <InsumosForm open={openInsumos} onClose={() => setOpenInsumos(false)} />
         <ServiciosInternosForm

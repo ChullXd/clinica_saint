@@ -7,12 +7,16 @@ import {
   Paper,
   Button,
   Divider,
+  Card,
+  CardContent,
 } from "@mui/material";
 import {
   Save as SaveIcon,
   Print as PrintIcon,
   Edit as EditIcon,
+  Assignment as FormIcon,
 } from "@mui/icons-material";
+
 
 // Importar los componentes de formularios existentes
 import DatosGeneralesForm from "./DatosGenerales/DatosGeneralesForm";
@@ -68,20 +72,23 @@ export default function ProtocoloQuirurgico() {
   return (
     <Paper elevation={3} sx={{ p: 2, m: 2 }}>
       {/* Encabezado */}
-      <Typography
-        variant="h5"
-        sx={{
-          mb: 2,
-          fontWeight: "bold",
-          color: "#1A3C6D",
-          textAlign: "center",
-        }}
-      >
-        PROTOCOLO QUIRÚRGICO
-      </Typography>
-      <Typography variant="subtitle2" align="center" color="text.secondary" sx={{ mb: 2 }}>
-        MSP / HCU-Form. 022 / 2008
-      </Typography>
+        <Card sx={{ mb: 3, boxShadow: 3 }}>
+          <CardContent sx={{ p: 3 }}>
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "left" }}>
+              <FormIcon sx={{ fontSize: 36, color: "#1A3C6D", mr: 2 }} />
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: "bold",
+                  color: "#1A3C6D",
+                  textAlign: "center",
+                }}
+              >
+                FORMULARIO 017 MSP PROTOCOLO QUIRÚRGICO
+              </Typography>
+            </Box>
+          </CardContent>
+        </Card>
 
       {/* Navegación por pestañas */}
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -103,8 +110,8 @@ export default function ProtocoloQuirurgico() {
           }}
         >
           <Tab label="DATOS GENERALES" {...a11yProps(0)} />
-          <Tab label="DIAGNÓSTICOS" {...a11yProps(1)} />
           <Tab label="EQUIPO QUIRÚRGICO" {...a11yProps(2)} />
+          <Tab label="DIAGNÓSTICOS" {...a11yProps(1)} />
           <Tab label="TIEMPOS QUIRÚRGICOS" {...a11yProps(3)} />
           <Tab label="COMPLICACIONES" {...a11yProps(4)} />
           <Tab label="EXÁMENES HISTOPATOLÓGICOS" {...a11yProps(5)} />
@@ -119,11 +126,11 @@ export default function ProtocoloQuirurgico() {
       </TabPanel>
 
 
-      <TabPanel value={tabValue} index={2}>
+      <TabPanel value={tabValue} index={1}>
         <EquipoQuirurgicoForm />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={1}>
+      <TabPanel value={tabValue} index={2}>
         <Diagnostico />
       </TabPanel>
 

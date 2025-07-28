@@ -126,63 +126,67 @@ export default function AnamnesisHC() {
             </Tooltip>
           </Box>
 
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Box sx={{ mb: 1 }}>
-                <Typography variant="caption" sx={{ color: "#666" }}>
+          <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {/* Columna izquierda */}
+            <Box sx={{ flex: 1, minWidth: "300px" }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
                   N° HISTORIA CLÍNICA:
                 </Typography>
-                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                <Typography variant="body1" sx={{ fontWeight: "bold", color: "#1A3C6D" }}>
                   {pacienteData.numeroHistoria}
                 </Typography>
               </Box>
 
-              <Box sx={{ mb: 1 }}>
-                <Typography variant="caption" sx={{ color: "#666" }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
                   APELLIDOS:
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{ fontWeight: "medium" }}>
                   {pacienteData.apellidos}
                 </Typography>
               </Box>
 
-              <Box sx={{ mb: 1 }}>
-                <Typography variant="caption" sx={{ color: "#666" }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
                   NOMBRES:
                 </Typography>
-                <Typography variant="body1">{pacienteData.nombres}</Typography>
+                <Typography variant="body1" sx={{ fontWeight: "medium" }}>
+                  {pacienteData.nombres}
+                </Typography>
               </Box>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} md={6}>
-              <Box sx={{ mb: 1 }}>
-                <Typography variant="caption" sx={{ color: "#666" }}>
+            {/* Columna derecha */}
+            <Box sx={{ flex: 1, minWidth: "300px" }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
                   SEXO / EDAD:
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{ fontWeight: "medium" }}>
                   {pacienteData.sexo} / {pacienteData.edad}
                 </Typography>
               </Box>
 
-              <Box sx={{ mb: 1 }}>
-                <Typography variant="caption" sx={{ color: "#666" }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
                   FECHA DE NACIMIENTO:
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{ fontWeight: "medium" }}>
                   {pacienteData.fechaNacimiento}
                 </Typography>
               </Box>
 
-              <Box sx={{ mb: 1 }}>
-                <Typography variant="caption" sx={{ color: "#666" }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
                   CÉDULA / NACIONALIDAD:
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{ fontWeight: "medium" }}>
                   {pacienteData.cedula} / {pacienteData.nacionalidad}
                 </Typography>
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
             <HistoryIcon fontSize="small" sx={{ mr: 1, color: "#1A3C6D" }} />
@@ -303,10 +307,11 @@ export default function AnamnesisHC() {
       </Card>
 
       {/* Revisión de Sistemas y Signos Vitales */}
-      <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={7}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+        {/* Revisión de Sistemas */}
+        <Box sx={{ flex: 2 }}>
           <Card sx={{ height: "100%" }}>
-            <CardContent sx={{ p: 2, height: "100%" }}>
+            <CardContent sx={{ p: 2 }}>
               <Typography
                 variant="h6"
                 sx={{ color: "#1A3C6D", fontWeight: "bold", mb: 2 }}
@@ -317,35 +322,88 @@ export default function AnamnesisHC() {
               <TableContainer>
                 <Table size="small">
                   <TableBody>
-                    {Object.entries(pacienteData.revisionSistemas).map(
-                      ([sistema, valor]) => (
-                        <TableRow key={sistema}>
-                          <TableCell
-                            component="th"
-                            sx={{
-                              width: "40%",
-                              fontWeight: "bold",
-                              border: "1px solid #eee",
-                            }}
-                          >
-                            {sistema.toUpperCase()}:
-                          </TableCell>
-                          <TableCell sx={{ border: "1px solid #eee" }}>
-                            {valor}
-                          </TableCell>
-                        </TableRow>
-                      )
-                    )}
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        sx={{
+                          width: "40%",
+                          fontWeight: "bold",
+                          border: "1px solid #eee",
+                        }}
+                      >
+                        CARDIOVASCULAR:
+                      </TableCell>
+                      <TableCell sx={{ border: "1px solid #eee" }}>
+                        {pacienteData.revisionSistemas.cardiovascular}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        sx={{
+                          fontWeight: "bold",
+                          border: "1px solid #eee",
+                        }}
+                      >
+                        RESPIRATORIO:
+                      </TableCell>
+                      <TableCell sx={{ border: "1px solid #eee" }}>
+                        {pacienteData.revisionSistemas.respiratorio}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        sx={{
+                          fontWeight: "bold",
+                          border: "1px solid #eee",
+                        }}
+                      >
+                        DIGESTIVO:
+                      </TableCell>
+                      <TableCell sx={{ border: "1px solid #eee" }}>
+                        {pacienteData.revisionSistemas.digestivo}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        sx={{
+                          fontWeight: "bold",
+                          border: "1px solid #eee",
+                        }}
+                      >
+                        GENITOURINARIO:
+                      </TableCell>
+                      <TableCell sx={{ border: "1px solid #eee" }}>
+                        {pacienteData.revisionSistemas.genitourinario}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        component="th"
+                        sx={{
+                          fontWeight: "bold",
+                          border: "1px solid #eee",
+                        }}
+                      >
+                        NERVIOSO:
+                      </TableCell>
+                      <TableCell sx={{ border: "1px solid #eee" }}>
+                        {pacienteData.revisionSistemas.nervioso}
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
-        <Grid item xs={12} md={5}>
+        {/* Signos Vitales */}
+        <Box sx={{ flex: 1 }}>
           <Card sx={{ height: "100%" }}>
-            <CardContent sx={{ p: 2, height: "100%" }}>
+            <CardContent sx={{ p: 2 }}>
               <Typography
                 variant="h6"
                 sx={{ color: "#1A3C6D", fontWeight: "bold", mb: 2 }}
@@ -353,71 +411,70 @@ export default function AnamnesisHC() {
                 SIGNOS VITALES
               </Typography>
 
-              <Stack spacing={1}>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Stack spacing={1.5}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Typography variant="body2" fontWeight="bold">
                     Presión Arterial:
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ color: "#1A3C6D", fontWeight: "medium" }}>
                     {pacienteData.signosVitales.presion}
                   </Typography>
                 </Box>
                 <Divider />
 
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Typography variant="body2" fontWeight="bold">
                     Frecuencia Cardíaca:
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ color: "#1A3C6D", fontWeight: "medium" }}>
                     {pacienteData.signosVitales.frecuenciaCardiaca}
                   </Typography>
                 </Box>
                 <Divider />
 
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Typography variant="body2" fontWeight="bold">
                     Frecuencia Respiratoria:
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ color: "#1A3C6D", fontWeight: "medium" }}>
                     {pacienteData.signosVitales.frecuenciaRespiratoria}
                   </Typography>
                 </Box>
                 <Divider />
 
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Typography variant="body2" fontWeight="bold">
                     Temperatura:
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ color: "#1A3C6D", fontWeight: "medium" }}>
                     {pacienteData.signosVitales.temperatura}
                   </Typography>
                 </Box>
                 <Divider />
 
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Typography variant="body2" fontWeight="bold">
                     Saturación O2:
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ color: "#1A3C6D", fontWeight: "medium" }}>
                     {pacienteData.signosVitales.saturacion}
                   </Typography>
                 </Box>
                 <Divider />
 
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Typography variant="body2" fontWeight="bold">
                     Peso / Talla:
                   </Typography>
-                  <Typography variant="body2">
-                    {pacienteData.signosVitales.peso} /{" "}
-                    {pacienteData.signosVitales.talla}
+                  <Typography variant="body2" sx={{ color: "#1A3C6D", fontWeight: "medium" }}>
+                    {pacienteData.signosVitales.peso} / {pacienteData.signosVitales.talla}
                   </Typography>
                 </Box>
               </Stack>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Impresión Diagnóstica */}
       <Card sx={{ mb: 3 }}>

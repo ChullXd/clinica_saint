@@ -14,6 +14,7 @@ import AnamnesisHC from "./Anamnesis/AnamnesisHC";
 import Evolucion from "./Evolucion/Evolucion";
 import ProtocoloQuirurgico from "./ProtocoloQuirurgico/ProtocoloQuirurgico";
 import ProtocoloAnestesiologo from "./ProtocoloAnestesiologo/ProtocoloAnestesiologo";
+import ConsentimientoInformado from "./ConsentimientoInformado/ConsentimientoInformado";
 
 
 interface OrdenesProps {
@@ -55,16 +56,26 @@ interface OrdenesProps {
           <Tabs
             value={value}
             onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             aria-label="ordenes examenes tabs"
             sx={{
               "& .MuiTab-root": {
                 fontWeight: 800,
-                fontSize: { xs: "1.0rem", sm: "1.2rem" },
+                fontSize: { xs: "0.85rem", sm: "1.0rem" },
                 color: "#1A3C6D",
                 textTransform: "none",
+                minWidth: { xs: "120px", sm: "150px" },
               },
               "& .Mui-selected": {
                 color: "#4A90E2",
+              },
+              "& .MuiTabs-scrollButtons": {
+                color: "#1A3C6D",
+                "&.Mui-disabled": {
+                  opacity: 0.3,
+                },
               },
             }}
           >
@@ -73,6 +84,7 @@ interface OrdenesProps {
             <Tab label="EVOLUCIÓN" />
             <Tab label="PROTOCOLO QUIRÚRGICO" />
             <Tab label="PROTOCOLO ANESTESIÓLOGO" />
+            <Tab label="CONSENTIMIENTO INFORMADO" />
           </Tabs>
         </Box>
         <Box sx={{ minHeight: "400px" }}>
@@ -81,6 +93,8 @@ interface OrdenesProps {
           {value === 2 && <Evolucion />}
           {value === 3 && <ProtocoloQuirurgico />}
           {value === 4 && <ProtocoloAnestesiologo />}
+          {value === 5 && <ConsentimientoInformado />}
+
         </Box>
       </DialogContent>
       <DialogActions sx={{ background: "#F4F8FB", pb: 2, pt: 1 }}>

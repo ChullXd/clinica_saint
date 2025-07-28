@@ -11,18 +11,30 @@ import {
   FormControl,
   FormLabel,
 } from "@mui/material";
+import {
+  Assignment as FormIcon,
+} from "@mui/icons-material";
 
 export default function EmergenciaHC() {
   return (
     <Box sx={{ p: 3, backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
-      <Typography
-        variant="h4"
-        component="h1"
-        gutterBottom
-        sx={{ color: "#1A3C6D", fontWeight: "bold", textAlign: "center" }}
-      >
-        HISTORIA CLÍNICA DE EMERGENCIA
-      </Typography>
+      <Card sx={{ mb: 3, boxShadow: 3 }}>
+        <CardContent sx={{ p: 3 }}>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "left" }}>
+            <FormIcon sx={{ fontSize: 36, color: "#1A3C6D", mr: 2 }} />
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "bold",
+                color: "#1A3C6D",
+                textAlign: "center",
+              }}
+            >
+              FORMULARIO 008 MSP - INGRESO
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
 
       {/* Sección A: Datos del establecimiento */}
       <Card sx={{ mb: 3, boxShadow: 3 }}>

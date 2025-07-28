@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react"; // AGREGAR useEffect
 import {
   Dialog,
   DialogTitle,
@@ -18,13 +18,75 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
+// Agrega esta definición de tipo al inicio del archivo
+type PacienteData = {
+  sala: string;
+  cama: string;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+  name: string;
+  id: string;
+  sex: string;
+  edad: string;
+  fechaNacimiento: string;
+  genderImage: string;
+  admissionDate: string;
+  dischargeDate: string;
+  medicoTratante: { medico: boolean; clinica: boolean };
+  medicoCirujano: { medico: boolean; clinica: boolean };
+  medicoAnestesiologo: string;
+  procedencia: string;
+  cuadroClinico: string;
+  resumen?: string;
+};
+
 interface AltaMedicaProps {
   open: boolean;
   onClose: () => void;
+  pacienteData?: PacienteData; // NUEVO - datos del paciente seleccionado
 }
 
-const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose }) => {
+const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose, pacienteData }) => {
   const [tab, setTab] = React.useState(0);
+  const [formData, setFormData] = React.useState({
+    paciente: "",
+    historia: "",
+    medicoTratante: "",
+    medicoResidente: "",
+    observaciones: "",
+    observacion: "",
+    fechaIngreso: "", // NUEVO
+    fechaEgreso: "",  // NUEVO
+  });
+
+  // Actualizar formulario cuando se reciben datos del paciente
+  useEffect(() => {
+    console.log("pacienteData recibido:", pacienteData); // Para debug
+    if (pacienteData) {
+      const nombreCompleto = `${pacienteData.primerNombre || ''} ${pacienteData.primerApellido || ''}`.trim();
+      setFormData(prev => ({
+        ...prev,
+        paciente: nombreCompleto,
+        historia: pacienteData.id || "",
+        fechaIngreso: pacienteData.admissionDate || "",
+        medicoTratante: pacienteData.medicoAnestesiologo || "",
+      }));
+      console.log("Fecha de ingreso establecida:", pacienteData.admissionDate); // Para debug
+    }
+  }, [pacienteData, open]); // Agregar 'open' como dependencia
+
+  // Función para convertir a mayúsculas automáticamente
+  const handleUpperCaseChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    const uppercaseValue = value.toUpperCase();
+    
+    setFormData(prev => ({
+      ...prev,
+      [name]: uppercaseValue,
+    }));
+  };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -38,7 +100,7 @@ const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose }) => {
           py: 2,
         }}
       >
-        {tab === 0 ? "ORDEN ALTA MEDICA" : "ALTA MEDICA"}
+        {tab === 0 ? "ORDEN ALTA MÉDICA" : "ALTA MÉDICA"}
       </DialogTitle>
       <DialogContent
         sx={{
@@ -54,89 +116,154 @@ const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose }) => {
           onChange={(_, v) => setTab(v)}
           sx={{ mb: 3, background: "#e3eaf6", borderRadius: 2 }}
         >
-          <Tab label="ORDEN ALTA MEDICA" />
-          <Tab label="ALTA MEDICA" />
+          <Tab label="ORDEN ALTA MÉDICA" />
+          <Tab label="ALTA MÉDICA" />
         </Tabs>
 
         {tab === 0 && (
           <Box>
             <Typography sx={{ fontWeight: "bold", color: "#1A3C6D", mb: 2 }}>
-              Datos del Paciente
+              DATOS DEL PACIENTE
             </Typography>
             <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-              <TextField label="Paciente" fullWidth size="small" />
-              <TextField label="N° Historia Clínica" fullWidth size="small" />
+              <TextField 
+                name="paciente"
+                label="PACIENTE" 
+                fullWidth 
+                size="small"
+                value={formData.paciente}
+                onChange={handleUpperCaseChange}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                }}
+              />
+              <TextField 
+                name="historia"
+                label="N° HISTORIA CLÍNICA" 
+                fullWidth 
+                size="small"
+                value={formData.historia}
+                onChange={handleUpperCaseChange}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                }}
+              />
             </Box>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Tipo de atención</InputLabel>
-              <Select label="Tipo de atención" size="small">
-                <MenuItem value="URG">Urgencia</MenuItem>
-                <MenuItem value="PROG">Programada</MenuItem>
+              <InputLabel>TIPO DE ATENCIÓN</InputLabel>
+              <Select label="TIPO DE ATENCIÓN" size="small" sx={{ backgroundColor: "#FFFFFF" }}>
+                <MenuItem value="URG">URGENCIA</MenuItem>
+                <MenuItem value="PROG">PROGRAMADA</MenuItem>
               </Select>
             </FormControl>
-            <Typography sx={{ fontWeight: "bold", color: "#1A3C6D", mb: 1 }}>
-              Información de alta médica
+            <Typography sx={{ fontWeight: "bold", color: "#1A3C6D", mb: 3 }}>
+              INFORMACIÓN DE ALTA MÉDICA
             </Typography>
             <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
               <TextField
-                label="Fecha de Ingreso"
+                name="fechaIngreso"
+                label="FECHA DE INGRESO"
                 type="date"
                 fullWidth
                 size="small"
+                value={formData.fechaIngreso}
+                disabled // DESHABILITADO porque es automático
                 InputLabelProps={{ shrink: true }}
+                sx={{
+                  backgroundColor: "#E0E0E0", // Color gris para indicar que está deshabilitado
+                  borderRadius: "4px",
+                }}
               />
               <TextField
-                label="Fecha de Egreso"
+                name="fechaEgreso"
+                label="FECHA DE EGRESO"
                 type="date"
                 fullWidth
                 size="small"
+                value={formData.fechaEgreso}
+                onChange={(e) => setFormData(prev => ({ ...prev, fechaEgreso: e.target.value }))}
                 InputLabelProps={{ shrink: true }}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                }}
               />
               <TextField
-                label="Hora de alta"
+                label="HORA DE ALTA"
                 type="time"
                 fullWidth
                 size="small"
                 InputLabelProps={{ shrink: true }}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                }}
               />
             </Box>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Diagnóstico de egreso CIE10</InputLabel>
-              <Select label="Diagnóstico de egreso CIE10" size="small">
-                <MenuItem value="A00">A00 - Cólera</MenuItem>
-                <MenuItem value="B00">B00 - Herpesviral</MenuItem>
+              <InputLabel>DIAGNÓSTICO DE EGRESO CIE10</InputLabel>
+              <Select label="DIAGNÓSTICO DE EGRESO CIE10" size="small" sx={{ backgroundColor: "#FFFFFF" }}>
+                <MenuItem value="A00">A00 - CÓLERA</MenuItem>
+                <MenuItem value="B00">B00 - HERPESVIRAL</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Especialidad médica</InputLabel>
-              <Select label="Especialidad médica" size="small">
-                <MenuItem value="MED">Medicina</MenuItem>
-                <MenuItem value="CIR">Cirugía</MenuItem>
+              <InputLabel>ESPECIALIDAD MÉDICA</InputLabel>
+              <Select label="ESPECIALIDAD MÉDICA" size="small" sx={{ backgroundColor: "#FFFFFF" }}>
+                <MenuItem value="MED">MEDICINA</MenuItem>
+                <MenuItem value="CIR">CIRUGÍA</MenuItem>
               </Select>
             </FormControl>
             <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-              <TextField label="Médico Tratante" fullWidth size="small" />
+              <TextField 
+                name="medicoTratante"
+                label="MÉDICO TRATANTE" 
+                fullWidth 
+                size="small"
+                value={formData.medicoTratante}
+                onChange={handleUpperCaseChange}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                }}
+              />
               <TextField
-                label="Médico Residente Responsable"
+                name="medicoResidente"
+                label="MÉDICO RESIDENTE RESPONSABLE"
                 fullWidth
                 size="small"
+                value={formData.medicoResidente}
+                onChange={handleUpperCaseChange}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                }}
               />
             </Box>
             <TextField
-              label="Observaciones adicionales"
+              name="observaciones"
+              label="OBSERVACIONES ADICIONALES"
               multiline
               minRows={3}
               fullWidth
-              sx={{ mb: 2 }}
+              value={formData.observaciones}
+              onChange={handleUpperCaseChange}
+              sx={{ 
+                mb: 2,
+                backgroundColor: "#FFFFFF",
+                borderRadius: "4px",
+              }}
             />
             <Typography sx={{ fontWeight: "bold", color: "#1A3C6D", mb: 1 }}>
-              Solicitudes asociadas
+              SOLICITUDES ASOCIADAS
             </Typography>
             <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-              <FormControlLabel control={<Checkbox />} label="Ambulancia" />
-              <FormControlLabel control={<Checkbox />} label="Imágenes" />
-              <FormControlLabel control={<Checkbox />} label="Laboratorio" />
-              <FormControlLabel control={<Checkbox />} label="Interconsulta" />
+              <FormControlLabel control={<Checkbox />} label="AMBULANCIA" />
+              <FormControlLabel control={<Checkbox />} label="IMÁGENES" />
+              <FormControlLabel control={<Checkbox />} label="LABORATORIO" />
+              <FormControlLabel control={<Checkbox />} label="INTERCONSULTA" />
             </Box>
           </Box>
         )}
@@ -145,61 +272,83 @@ const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose }) => {
           <Box>
             <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
               <FormControl fullWidth>
-                <InputLabel>Tipo de alta</InputLabel>
-                <Select label="Tipo de alta" size="small">
-                  <MenuItem value="ALTA1">Alta 1</MenuItem>
-                  <MenuItem value="ALTA2">Alta 2</MenuItem>
+                <InputLabel>TIPO DE ALTA</InputLabel>
+                <Select label="TIPO DE ALTA" size="small" sx={{ backgroundColor: "#FFFFFF" }}>
+                  <MenuItem value="ALTA1">ALTA 1</MenuItem>
+                  <MenuItem value="ALTA2">ALTA 2</MenuItem>
                 </Select>
               </FormControl>
               <FormControl fullWidth>
-                <InputLabel>Discapacidad</InputLabel>
-                <Select label="Discapacidad" size="small">
-                  <MenuItem value="SI">Sí</MenuItem>
-                  <MenuItem value="NO">No</MenuItem>
+                <InputLabel>DISCAPACIDAD</InputLabel>
+                <Select label="DISCAPACIDAD" size="small" sx={{ backgroundColor: "#FFFFFF" }}>
+                  <MenuItem value="SI">SÍ</MenuItem>
+                  <MenuItem value="NO">NO</MenuItem>
                 </Select>
               </FormControl>
             </Box>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Retiro</InputLabel>
-              <Select label="Retiro" size="small">
-                <MenuItem value="DOMICILIO">Domicilio</MenuItem>
-                <MenuItem value="OTRO">Otro</MenuItem>
+              <InputLabel>RETIRO</InputLabel>
+              <Select label="RETIRO" size="small" sx={{ backgroundColor: "#FFFFFF" }}>
+                <MenuItem value="DOMICILIO">DOMICILIO</MenuItem>
+                <MenuItem value="OTRO">OTRO</MenuItem>
               </Select>
             </FormControl>
             <TextField
-              label="Médico Tratante"
+              name="medicoTratante"
+              label="MÉDICO TRATANTE"
               fullWidth
               size="small"
-              sx={{ mb: 2 }}
+              value={formData.medicoTratante}
+              onChange={handleUpperCaseChange}
+              sx={{ 
+                mb: 2,
+                backgroundColor: "#FFFFFF",
+                borderRadius: "4px",
+              }}
             />
             <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
               <TextField
-                label="Fecha"
+                label="FECHA"
                 type="date"
                 fullWidth
                 size="small"
                 InputLabelProps={{ shrink: true }}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                }}
               />
               <TextField
-                label="Hora"
+                label="HORA"
                 type="time"
                 fullWidth
                 size="small"
                 InputLabelProps={{ shrink: true }}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                }}
               />
             </Box>
             <TextField
-              label="Observación"
+              name="observacion"
+              label="OBSERVACIÓN"
               multiline
               minRows={3}
               fullWidth
-              sx={{ mb: 2 }}
+              value={formData.observacion}
+              onChange={handleUpperCaseChange}
+              sx={{ 
+                mb: 2,
+                backgroundColor: "#FFFFFF",
+                borderRadius: "4px",
+              }}
             />
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Diagnóstico CIE10</InputLabel>
-              <Select label="Diagnóstico CIE10" size="small">
-                <MenuItem value="A00">A00 - Cólera</MenuItem>
-                <MenuItem value="B00">B00 - Herpesviral</MenuItem>
+              <InputLabel>DIAGNÓSTICO CIE10</InputLabel>
+              <Select label="DIAGNÓSTICO CIE10" size="small" sx={{ backgroundColor: "#FFFFFF" }}>
+                <MenuItem value="A00">A00 - CÓLERA</MenuItem>
+                <MenuItem value="B00">B00 - HERPESVIRAL</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -218,7 +367,7 @@ const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose }) => {
             "&:hover": { background: "#c62828" },
           }}
         >
-          Cerrar
+          CERRAR
         </Button>
         <Button
           variant="contained"
@@ -231,7 +380,7 @@ const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose }) => {
             "&:hover": { background: "#274472" },
           }}
         >
-          Registrar
+          REGISTRAR
         </Button>
         {tab === 0 && (
           <Button
@@ -245,7 +394,7 @@ const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose }) => {
               "&:hover": { background: "#115293" },
             }}
           >
-            Exportar
+            EXPORTAR
           </Button>
         )}
         {tab === 1 && (
@@ -260,7 +409,7 @@ const AltaMedicaForm: React.FC<AltaMedicaProps> = ({ open, onClose }) => {
               "&:hover": { background: "#115293" },
             }}
           >
-            Editar
+            EDITAR
           </Button>
         )}
       </DialogActions>
