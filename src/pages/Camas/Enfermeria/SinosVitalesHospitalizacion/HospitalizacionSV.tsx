@@ -237,22 +237,7 @@ export default function HospitalizacionSV() {
                     helperText="Cédula/Pasaporte/Carnet"
                   />
                 </Box>
-                <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 16.66%" } }}>
-                  <Button
-                    variant="contained"
-                    onClick={buscarPaciente}
-                    size="small"
-                    fullWidth
-                    startIcon={<SearchIcon />}
-                    sx={{
-                      background: "#1A3C6D",
-                      "&:hover": { background: "#274472" },
-                      height: "40px",
-                    }}
-                  >
-                    BUSCAR
-                  </Button>
-                </Box>
+              
                 <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 33.33%" } }}>
                   <TextField
                     label="NOMBRE DEL PACIENTE"
