@@ -17,6 +17,7 @@ import ProtocoloAnestesiologo from "./ProtocoloAnestesiologo/ProtocoloAnestesiol
 import ConsentimientoInformado from "./ConsentimientoInformado/ConsentimientoInformado";
 import CirugiaSegura from "./CirugiaSegura/CirugiaSegura";
 import SubprocesoRecibimiento from "./SubprocesoRecibimiento/SubprocesoRecibimiento";
+import Interconsulta from "./Interconsulta/Interconsulta";
 
 
 interface OrdenesProps {
@@ -89,6 +90,7 @@ interface OrdenesProps {
             <Tab label="CONSENTIMIENTO INFORMADO" />
             <Tab label="CIRUGIA SEGURA" />
             <Tab label="SUBPROCESO DE RECIBIMIENTO" />
+            <Tab label="INTERCONSULTA" />
           </Tabs>
         </Box>
         <Box sx={{ minHeight: "400px" }}>
@@ -100,6 +102,7 @@ interface OrdenesProps {
           {value === 5 && <ConsentimientoInformado />}
           {value === 6 && <CirugiaSegura />}
           {value === 7 && <SubprocesoRecibimiento />}
+          {value === 8 && <Interconsulta />}
         </Box>
       </DialogContent>
       <DialogActions sx={{ background: "#F4F8FB", pb: 2, pt: 1 }}>

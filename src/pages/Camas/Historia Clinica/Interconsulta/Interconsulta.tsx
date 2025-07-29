@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
     Box,
@@ -16,21 +17,8 @@ import {
     Edit as EditIcon,
     Assignment as FormIcon,
 } from "@mui/icons-material";
-import EstablecimientoPaciente from "./EstablecimientoPaciente/EstablecimientoPaciente";
-import AntecedentesPatologicosM from "./AntecedentePatologicosM/AntecedentesPatologicosM";
-import AntecedentesPrenatalesRN from "./AntecedentesPrenatales/AntecedentesPrenatalesRN";
-import AntecedentesNatales from "./AntecedentesNatales/AntecedentesNatales";
-import Apgar from "./Apgar/Apgar";
-import Intervnciones from "./Intervenciones/Intervnciones";
-import Profilaxis from "./Profilasxis/Profilaxis";
-import Vacunas from "./Vacunas/Vacunas";
-import ConstantesVitales from "./ConstantesVitales/ConstantesVitales";
-import ExamenFisico from "./ExameFisico/ExamenFisico";
-import DiagnosticoInicial from "./DiagnosticoInicial/DiagnosticoInicial";
-import TratamientoInicial from "./TratamientoInicial/TratamientoInicial";
-import ProfesionalResponsable from "./ProfesionalResponsable/ProfesionalResponsable";
-
-
+import Solicitud from "./Solicitud/Solicitud";
+import Informe from "./Informe/Informe";
 
 // Importar los componentes de formularios existentes
 
@@ -67,7 +55,7 @@ function a11yProps(index: number) {
     };
 }
 
-export default function SubprocesoRecibimiento() {
+export default function Interconsulta() {
     // Estado para controlar la pestaña activa
     const [tabValue, setTabValue] = useState(0);
 
@@ -91,7 +79,7 @@ export default function SubprocesoRecibimiento() {
                                 textAlign: "center",
                             }}
                         >
-                            FORMULARIO 060 MSP CIRUGÍA SEGURA
+                            FORMULARIO 007 MSP INTERCONSULTA
                         </Typography>
                     </Box>
                 </CardContent>
@@ -116,68 +104,21 @@ export default function SubprocesoRecibimiento() {
                         },
                     }}
                 >
-                    <Tab label="DATOS DEL ESTABLECIMIENTO" {...a11yProps(0)} />
-                    <Tab label="ANTECEDENTES PATOLOGICOS MATERNOS" {...a11yProps(1)} />
-                    <Tab label="ANTECEDENTES PRENATALES DE RECIEN NACIDOS" {...a11yProps(2)} />
-                    <Tab label="ANTECEDENTES NATALES" {...a11yProps(3)} />
-                    <Tab label="APGAR" {...a11yProps(4)} />
-                    <Tab label="INTERVENCIONES" {...a11yProps(5)} />
-                    <Tab label="PROFILAXIS" {...a11yProps(6)} />    
-                    <Tab label="VACUNAS" {...a11yProps(7)} />
-                    <Tab label="CONSTANTES VITALES" {...a11yProps(8)} />
-                    <Tab label="EXAMEN FISICO" {...a11yProps(9)} />
-                    <Tab label="DIAGNOSTICO INICIAL" {...a11yProps(10)} />
-                    <Tab label="TRATAMIENTO INICIAL" {...a11yProps(11)} />
-                    <Tab label="PROFESIONAL RESPONSABLE" {...a11yProps(12)} />
+                    <Tab label="SOLICITUD" {...a11yProps(0)} />
+                    <Tab label="INFORME" {...a11yProps(1)} />
+                  
 
                 </Tabs>
             </Box>
 
             {/* Contenido de las pestañas */}
             <TabPanel value={tabValue} index={0}>
-                <EstablecimientoPaciente />
+                <Solicitud />
             </TabPanel>
-
             <TabPanel value={tabValue} index={1}>
-                <AntecedentesPatologicosM />
+                <Informe />
             </TabPanel>
 
-            <TabPanel value={tabValue} index={2}>
-                <AntecedentesPrenatalesRN />
-            </TabPanel>
-            <TabPanel value={tabValue} index={3}>
-                <AntecedentesNatales />
-            </TabPanel>
-            <TabPanel value={tabValue} index={4}>
-                <Apgar />
-            </TabPanel>
-            <TabPanel value={tabValue} index={5}>
-                <Intervnciones />
-            </TabPanel>
-            <TabPanel value={tabValue} index={6}>
-                <Profilaxis />
-            </TabPanel>
-            <TabPanel value={tabValue} index={7}>
-                <Vacunas />
-            </TabPanel>
-            <TabPanel value={tabValue} index={7}>
-                <Vacunas />
-            </TabPanel>
-            <TabPanel value={tabValue} index={8}>
-                <ConstantesVitales />
-            </TabPanel>
-            <TabPanel value={tabValue} index={9}>
-                <ExamenFisico />
-            </TabPanel>
-            <TabPanel value={tabValue} index={10}>
-                <DiagnosticoInicial />
-            </TabPanel>
-            <TabPanel value={tabValue} index={11}>
-                <TratamientoInicial />
-            </TabPanel>
-            <TabPanel value={tabValue} index={12}>
-                <ProfesionalResponsable />
-            </TabPanel>
 
             <Divider sx={{ mt: 4, mb: 2 }} />
 
