@@ -1740,75 +1740,44 @@ export default function ConsentimientoInformado() {
       {/* Botones de acción */}
       <Card sx={{ mb: 2, boxShadow: 2 }}>
         <CardContent sx={{ p: 2 }}>
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: 1.5
-          }}>
-            <Button
-              variant="contained"
-              startIcon={<SaveIcon />}
-              sx={{ 
-                fontSize: '0.75rem',
-                backgroundColor: '#4caf50',
-                '&:hover': { backgroundColor: '#45a049' }
-              }}
-            >
-              Guardar
-            </Button>
-
-            <Button
-              variant="outlined"
-              startIcon={<NewIcon />}
-              onClick={limpiarFormulario}
-              sx={{ 
-                fontSize: '0.75rem',
-                color: '#1A3C6D',
-                borderColor: '#1A3C6D'
-              }}
-            >
-              Nuevo
-            </Button>
-
-            <Button
-              variant="outlined"
-              startIcon={<EditIcon />}
-              sx={{ 
-                fontSize: '0.75rem',
-                color: '#1A3C6D',
-                borderColor: '#1A3C6D'
-              }}
-            >
-              Editar
-            </Button>
-
-            <Button
-              variant="outlined"
-              startIcon={<PrintIcon />}
-              onClick={() => window.print()}
-              sx={{ 
-                fontSize: '0.75rem',
-                color: '#1A3C6D',
-                borderColor: '#1A3C6D'
-              }}
-            >
-              Imprimir
-            </Button>
-
-            <Button
-              variant="outlined"
-              startIcon={<PdfIcon />}
-              sx={{ 
-                fontSize: '0.75rem',
-                color: '#f57c00',
-                borderColor: '#f57c00'
-              }}
-            >
-              Exportar PDF
-            </Button>
-          </Box>
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 1.5, flexWrap: "wrap" }}>
+                  <Button
+                    variant="contained"
+                    startIcon={<SaveIcon />}
+                    size="small"
+                    sx={{
+                      background: "#1A3C6D",
+                      "&:hover": { background: "#274472" },
+                      fontSize: "0.8rem"
+                    }}
+                  >
+                    GUARDAR
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    startIcon={<EditIcon />}
+                    size="small"
+                    sx={{
+                      color: "#1A3C6D",
+                      borderColor: "#1A3C6D",
+                      fontSize: "0.8rem"
+                    }}
+                  >
+                    EDITAR
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    startIcon={<PrintIcon />}
+                    size="small"
+                    sx={{
+                      color: "#1A3C6D",
+                      borderColor: "#1A3C6D",
+                      fontSize: "0.8rem"
+                    }}
+                  >
+                    IMPRIMIR
+                  </Button>
+                </Box>
         </CardContent>
       </Card>
 
@@ -1834,22 +1803,123 @@ export default function ConsentimientoInformado() {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openCrearPlantillaDialog} onClose={() => setOpenCrearPlantillaDialog(false)}>
-        <DialogTitle>Crear nueva plantilla</DialogTitle>
-        <DialogContent>
+           <Dialog 
+        open={openCrearPlantillaDialog} 
+        onClose={() => setOpenCrearPlantillaDialog(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12)'
+          }
+        }}
+      >
+        <DialogTitle sx={{ 
+          pb: 1, 
+          background: 'linear-gradient(135deg, #1A3C6D 0%, #1A3C6D 100%)',
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1
+        }}>
+          <SaveIcon sx={{ fontSize: '1.2rem' }} />
+          <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+            Crear Nueva Plantilla
+          </Typography>
+        </DialogTitle>
+        
+        <DialogContent sx={{ pt: 3, pb: 2 }}>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="body2" sx={{ 
+              mb: 2, 
+              color: 'text.secondary', 
+              fontSize: '0.85rem',
+              lineHeight: 1.4
+            }}>
+              📋 Guarde los datos actuales del consentimiento como una plantilla reutilizable para futuros procedimientos similares.
+            </Typography>
+          </Box>
+
           <TextField
             autoFocus
-            margin="dense"
             label="Nombre de la plantilla"
             fullWidth
             variant="outlined"
             value={nombreNuevaPlantilla}
             onChange={(e) => setNombreNuevaPlantilla(e.target.value)}
+            placeholder="Ej: Apendicectomía Laparoscópica, Artroscopia de Rodilla..."
+            sx={{ 
+              mb: 2,
+              '& .MuiInputBase-input': { fontSize: '0.9rem' },
+              '& .MuiInputLabel-root': { fontSize: '0.9rem' }
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FormIcon sx={{ fontSize: '1rem', color: '#1A3C6D' }} />
+                </InputAdornment>
+              ),
+            }}
+            helperText="El nombre debe ser descriptivo del procedimiento"
           />
+
+          {/* Vista previa de datos que se guardarán */}
+          <Card variant="outlined" sx={{ 
+            backgroundColor: '#f8f9fa',
+            border: '1px solid #e9ecef'
+          }}>
+            
+          </Card>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenCrearPlantillaDialog(false)}>Cancelar</Button>
-          <Button onClick={crearNuevaPlantilla} variant="contained">Guardar</Button>
+        
+        <DialogActions sx={{ 
+          p: 2.5, 
+          pt: 1,
+          gap: 1,
+          backgroundColor: '#f8f9fa',
+          borderTop: '1px solid #e9ecef'
+        }}>
+          <Button 
+            onClick={() => {
+              setOpenCrearPlantillaDialog(false);
+              setNombreNuevaPlantilla('');
+            }}
+            variant="outlined"
+            sx={{ 
+              fontSize: '0.85rem',
+              px: 3,
+              color: '#6c757d',
+              borderColor: '#6c757d',
+              '&:hover': {
+                borderColor: '#495057',
+                color: '#495057'
+              }
+            }}
+          >
+            Cancelar
+          </Button>
+          
+          <Button 
+            onClick={crearNuevaPlantilla}
+            variant="contained"
+            disabled={!nombreNuevaPlantilla.trim()}
+            startIcon={<SaveIcon />}
+            sx={{ 
+              fontSize: '0.85rem',
+              px: 3,
+              background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #218838 0%, #1e7e34 100%)',
+              },
+              '&:disabled': {
+                background: '#e9ecef',
+                color: '#6c757d'
+              }
+            }}
+          >
+            Guardar Plantilla
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

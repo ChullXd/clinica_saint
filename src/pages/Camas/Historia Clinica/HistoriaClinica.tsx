@@ -15,6 +15,8 @@ import Evolucion from "./Evolucion/Evolucion";
 import ProtocoloQuirurgico from "./ProtocoloQuirurgico/ProtocoloQuirurgico";
 import ProtocoloAnestesiologo from "./ProtocoloAnestesiologo/ProtocoloAnestesiologo";
 import ConsentimientoInformado from "./ConsentimientoInformado/ConsentimientoInformado";
+import CirugiaSegura from "./CirugiaSegura/CirugiaSegura";
+import SubprocesoRecibimiento from "./SubprocesoRecibimiento/SubprocesoRecibimiento";
 
 
 interface OrdenesProps {
@@ -85,6 +87,8 @@ interface OrdenesProps {
             <Tab label="PROTOCOLO QUIRÚRGICO" />
             <Tab label="PROTOCOLO ANESTESIÓLOGO" />
             <Tab label="CONSENTIMIENTO INFORMADO" />
+            <Tab label="CIRUGIA SEGURA" />
+            <Tab label="SUBPROCESO DE RECIBIMIENTO" />
           </Tabs>
         </Box>
         <Box sx={{ minHeight: "400px" }}>
@@ -94,7 +98,8 @@ interface OrdenesProps {
           {value === 3 && <ProtocoloQuirurgico />}
           {value === 4 && <ProtocoloAnestesiologo />}
           {value === 5 && <ConsentimientoInformado />}
-
+          {value === 6 && <CirugiaSegura />}
+          {value === 7 && <SubprocesoRecibimiento />}
         </Box>
       </DialogContent>
       <DialogActions sx={{ background: "#F4F8FB", pb: 2, pt: 1 }}>
