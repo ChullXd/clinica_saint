@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -21,17 +21,13 @@ import {
   DialogActions,
   IconButton,
   Autocomplete,
-  Divider,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import {
   Search as SearchIcon,
-  Print as PrintIcon,
-  GetApp as ExportIcon,
-  Save as SaveIcon,
-  Edit as EditIcon,
   Delete as DeleteIcon,
-  Close as CloseIcon,
-  Add as AddIcon,
 } from "@mui/icons-material";
 
 interface DiagnosticoItem {
@@ -50,12 +46,15 @@ interface ExamenItem {
 }
 
 const AnatomiaPatologica = () => {
-  const [numeroHistoria, setNumeroHistoria] = useState("");
+  // Estados para datos del paciente (MISMO ESTÁNDAR QUE LABORATORIO)
+  const [numeroHistoria] = useState("9952"); // NO EDITABLE - VIENE DE DATOS DE CAMA
   const [numeroArchivo, setNumeroArchivo] = useState("");
-  const [nombrePaciente, setNombrePaciente] = useState("");
-  const [sexo, setSexo] = useState("");
-  const [edad, setEdad] = useState("");
-  const [tipoPaciente, setTipoPaciente] = useState("");
+  const [nombrePaciente] = useState("ALCIVAR VALERO GEOVANNY ULICES");
+  const [direccion] = useState("RECINTO CONVENTO JUJAN - L");
+  const [telefono] = useState("099-888-7777");
+  const [edad] = useState("50");
+  const [categoria] = useState("PARTICULAR");
+  
   const [servicio, setServicio] = useState("");
   const [especialidad, setEspecialidad] = useState("");
   const [prioridad, setPrioridad] = useState("");
@@ -63,10 +62,12 @@ const AnatomiaPatologica = () => {
   const [fechaToma, setFechaToma] = useState("");
   const [diagnosticos, setDiagnosticos] = useState<DiagnosticoItem[]>([]);
   const [diagnosticoBusqueda, setDiagnosticoBusqueda] = useState("");
+
+  // Estados para datos del profesional (NO EDITABLE - INFORMACIÓN DEL USUARIO LOGUEADO)
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
-  const [cedulaMedico, setCedulaMedico] = useState("");
-  const [nombreMedico, setNombreMedico] = useState("");
+  const [cedulaMedico] = useState("1234567890");
+  const [nombreMedico] = useState("DR. CARLOS EDUARDO MENDOZA SILVA");
   const [fechaRecepcion, setFechaRecepcion] = useState("");
   const [horaRecepcion, setHoraRecepcion] = useState("");
   const [nombreEntrega, setNombreEntrega] = useState("");
@@ -75,12 +76,11 @@ const AnatomiaPatologica = () => {
 
   // Estados para exámenes
   const [criterio, setCriterio] = useState("");
-  const [examenesDisponibles, setExamenesDisponibles] = useState<ExamenItem[]>(
-    []
-  );
-  const [examenesSeleccionados, setExamenesSeleccionados] = useState<
-    ExamenItem[]
-  >([]);
+  const [examenesDisponibles, setExamenesDisponibles] = useState<ExamenItem[]>([]);
+  const [examenesSeleccionados, setExamenesSeleccionados] = useState<ExamenItem[]>([]);
+
+  // Estados para opciones de acción (RADIO BUTTONS)
+  const [accionSeleccionada, setAccionSeleccionada] = useState("");
 
   // Estados para diálogos
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -160,25 +160,10 @@ const AnatomiaPatologica = () => {
     setHoraToma(horaActual);
     setCodigoInterno("AP-2024-001234");
     setExamenesDisponibles(examenesIniciales);
+    setNumeroArchivo("2024-AP-001234");
   }, []);
 
   // Funciones
-  const buscarPaciente = () => {
-    if (numeroHistoria === "9952") {
-      setNombrePaciente("ALCIVAR VALERO GEOVANNY ULICES");
-      setSexo("MASCULINO");
-      setEdad("50 AÑOS");
-      setTipoPaciente("SEGURO");
-      setNumeroArchivo("2024-AP-001234");
-    }
-  };
-
-  const buscarMedico = () => {
-    if (cedulaMedico === "0901234567") {
-      setNombreMedico("DR. JUAN PÉREZ GARCÍA");
-    }
-  };
-
   const agregarDiagnostico = (tipo: "PRE" | "DEF") => {
     if (diagnosticoBusqueda) {
       const diagnosticoEncontrado = diagnosticosCIE10.find(
@@ -201,7 +186,10 @@ const AnatomiaPatologica = () => {
   };
 
   const eliminarDiagnostico = (id: number) => {
-    setDiagnosticos(diagnosticos.filter((d) => d.id !== id));
+    const confirmado = window.confirm("¿ESTÁ SEGURO QUE DESEA ELIMINAR ESTE DIAGNÓSTICO?");
+    if (confirmado) {
+      setDiagnosticos(diagnosticos.filter((d) => d.id !== id));
+    }
   };
 
   const filtrarExamenes = () => {
@@ -228,7 +216,10 @@ const AnatomiaPatologica = () => {
   };
 
   const eliminarExamenSeleccionado = (id: number) => {
-    setExamenesSeleccionados(examenesSeleccionados.filter((e) => e.id !== id));
+    const confirmado = window.confirm("¿ESTÁ SEGURO QUE DESEA ELIMINAR ESTE EXAMEN?");
+    if (confirmado) {
+      setExamenesSeleccionados(examenesSeleccionados.filter((e) => e.id !== id));
+    }
   };
 
   const actualizarComentario = (id: number, comentario: string) => {
@@ -239,20 +230,40 @@ const AnatomiaPatologica = () => {
     );
   };
 
-  const handleGuardar = () => {
-    console.log("Orden de anatomía patológica guardada:", {
-      numeroHistoria,
-      servicio,
-      especialidad,
-      prioridad,
-      diagnosticos,
-      examenesSeleccionados,
-    });
-    alert("ORDEN DE ANATOMÍA PATOLÓGICA GUARDADA EXITOSAMENTE");
-  };
+  // Manejar acciones según opción seleccionada
+  const handleAccion = () => {
+    if (!accionSeleccionada) {
+      alert("Seleccione una acción");
+      return;
+    }
 
-  const handleEliminar = () => {
-    setOpenDeleteDialog(true);
+    switch (accionSeleccionada) {
+      case "guardar":
+        console.log("Orden de anatomía patológica guardada:", {
+          numeroHistoria,
+          servicio,
+          especialidad,
+          prioridad,
+          diagnosticos,
+          examenesSeleccionados,
+        });
+        alert("ORDEN DE ANATOMÍA PATOLÓGICA GUARDADA EXITOSAMENTE");
+        break;
+      case "exportar":
+        alert("EXPORTANDO PDF...");
+        break;
+      case "imprimir":
+        alert("ENVIANDO A IMPRESORA...");
+        break;
+      case "editar":
+        alert("MODO EDICIÓN ACTIVADO");
+        break;
+      case "eliminar":
+        setOpenDeleteDialog(true);
+        break;
+      default:
+        break;
+    }
   };
 
   const confirmarEliminacion = () => {
@@ -261,6 +272,7 @@ const AnatomiaPatologica = () => {
       alert("ORDEN ELIMINADA CORRECTAMENTE");
       setOpenDeleteDialog(false);
       setMotivoEliminacion("");
+      setAccionSeleccionada("");
     }
   };
 
@@ -268,148 +280,191 @@ const AnatomiaPatologica = () => {
     <Paper elevation={3} sx={{ p: 3, m: 2 }}>
       <Typography
         variant="h5"
-        sx={{ mb: 3, fontWeight: "bold", color: "#1A3C6D" }}
+        sx={{ mb: 3, fontWeight: "bold", color: "#1A3C6D", fontSize: "1rem", textAlign: "center" }}
       >
         ORDEN DE ANATOMÍA PATOLÓGICA
       </Typography>
 
-      {/* Sección A: Datos del Establecimiento */}
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
-          A. DATOS DEL ESTABLECIMIENTO
-        </Typography>
-
-        {/* Primera fila */}
-        <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
-          <TextField
-            label="NÚMERO DE HISTORIA CLÍNICA"
-            value={numeroHistoria}
-            onChange={(e) => setNumeroHistoria(e.target.value)}
-            size="small"
-            sx={{ width: 200 }}
-          />
-          <Button
-            variant="contained"
-            onClick={buscarPaciente}
-            size="small"
-            sx={{
-              background: "#1A3C6D",
-              "&:hover": { background: "#274472" },
-            }}
-          >
-            BUSCAR
-          </Button>
-          <TextField
-            label="NÚMERO DE ARCHIVO"
-            value={numeroArchivo}
-            disabled
-            size="small"
-            sx={{ width: 200 }}
-          />
-        </Box>
-
-        {/* Segunda fila */}
-        <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
-          <TextField
-            label="NOMBRE DEL PACIENTE"
-            value={nombrePaciente}
-            disabled
-            size="small"
-            sx={{ flex: 1, minWidth: 300 }}
-          />
-          <TextField
-            label="SEXO"
-            value={sexo}
-            disabled
-            size="small"
-            sx={{ width: 120 }}
-          />
-          <TextField
-            label="EDAD"
-            value={edad}
-            disabled
-            size="small"
-            sx={{ width: 120 }}
-          />
-          <TextField
-            label="TIPO DE PACIENTE"
-            value={tipoPaciente}
-            disabled
-            size="small"
-            sx={{ width: 150 }}
-          />
-        </Box>
+      {/* SECCIÓN DE DATOS DEL PACIENTE - MISMO ESTÁNDAR QUE LABORATORIO */}
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          color: "#1A3C6D",
+          mb: 1.5,
+          fontSize: "0.85rem",
+        }}
+      >
+         DATOS DEL PACIENTE
+      </Typography>
+      <Box sx={{ display: "flex", gap: 1.5, mb: 2.5 }}>
+        <TextField
+          label="HC"
+          value={numeroHistoria}
+          disabled // NO EDITABLE - VIENE DE DATOS DE CAMA
+          size="small"
+          sx={{ 
+            minWidth: 100,
+            backgroundColor: "#E0E0E0",
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+        <TextField
+          label="NOMBRE"
+          value={nombrePaciente}
+          disabled
+          size="small"
+          sx={{ 
+            flex: 1,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+        <TextField
+          label="DIRECCION"
+          value={direccion}
+          disabled
+          size="small"
+          sx={{ 
+            flex: 1,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+        <TextField
+          label="TELEFONO"
+          value={telefono}
+          disabled
+          size="small"
+          sx={{ 
+            minWidth: 120,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+        <TextField
+          label="EDAD"
+          value={edad}
+          disabled
+          size="small"
+          sx={{ 
+            minWidth: 70,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+        <TextField
+          label="CATEGORIA"
+          value={categoria}
+          disabled
+          size="small"
+          sx={{
+            minWidth: 100,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            "& .MuiInputBase-input": {
+              fontSize: '0.7rem',
+              color: categoria === "PARTICULAR" ? "#1976d2" : "#d32f2f",
+              fontWeight: "bold",
+            },
+          }}
+        />
       </Box>
 
-      {/* ANEXO 1 */}
-      <Box sx={{ mb: 3 }}>
-        <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>SERVICIO</InputLabel>
-            <Select
-              value={servicio}
-              label="SERVICIO"
-              onChange={(e) => setServicio(e.target.value)}
-            >
-              <MenuItem value="emergencia">EMERGENCIA</MenuItem>
-              <MenuItem value="consulta">CONSULTA EXTERNA</MenuItem>
-              <MenuItem value="hospitalizacion">HOSPITALIZACIÓN</MenuItem>
-            </Select>
-          </FormControl>
+      {/* DATOS DEL SERVICIO */}
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          color: "#1A3C6D",
+          mb: 1.5,
+          fontSize: "0.85rem",
+        }}
+      >
+         DATOS DEL SERVICIO
+      </Typography>
+      <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <InputLabel sx={{ fontSize: '0.7rem' }}>SERVICIO</InputLabel>
+          <Select
+            value={servicio}
+            label="SERVICIO"
+            onChange={(e) => setServicio(e.target.value)}
+            sx={{ '& .MuiSelect-select': { fontSize: '0.7rem' } }}
+          >
+            <MenuItem value="emergencia" sx={{ fontSize: '0.7rem' }}>EMERGENCIA</MenuItem>
+            <MenuItem value="consulta" sx={{ fontSize: '0.7rem' }}>CONSULTA EXTERNA</MenuItem>
+            <MenuItem value="hospitalizacion" sx={{ fontSize: '0.7rem' }}>HOSPITALIZACIÓN</MenuItem>
+          </Select>
+        </FormControl>
 
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>ESPECIALIDAD</InputLabel>
-            <Select
-              value={especialidad}
-              label="ESPECIALIDAD"
-              onChange={(e) => setEspecialidad(e.target.value)}
-            >
-              {especialidades.map((esp) => (
-                <MenuItem key={esp} value={esp}>
-                  {esp}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <InputLabel sx={{ fontSize: '0.7rem' }}>ESPECIALIDAD</InputLabel>
+          <Select
+            value={especialidad}
+            label="ESPECIALIDAD"
+            onChange={(e) => setEspecialidad(e.target.value)}
+            sx={{ '& .MuiSelect-select': { fontSize: '0.7rem' } }}
+          >
+            {especialidades.map((esp) => (
+              <MenuItem key={esp} value={esp} sx={{ fontSize: '0.7rem' }}>
+                {esp}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>PRIORIDAD</InputLabel>
-            <Select
-              value={prioridad}
-              label="PRIORIDAD"
-              onChange={(e) => setPrioridad(e.target.value)}
-            >
-              <MenuItem value="urgente">URGENTE</MenuItem>
-              <MenuItem value="rutina">RUTINA</MenuItem>
-            </Select>
-          </FormControl>
+        <FormControl size="small" sx={{ minWidth: 150 }}>
+          <InputLabel sx={{ fontSize: '0.7rem' }}>PRIORIDAD</InputLabel>
+          <Select
+            value={prioridad}
+            label="PRIORIDAD"
+            onChange={(e) => setPrioridad(e.target.value)}
+            sx={{ '& .MuiSelect-select': { fontSize: '0.7rem' } }}
+          >
+            <MenuItem value="urgente" sx={{ fontSize: '0.7rem' }}>URGENTE</MenuItem>
+            <MenuItem value="rutina" sx={{ fontSize: '0.7rem' }}>RUTINA</MenuItem>
+          </Select>
+        </FormControl>
 
-          <TextField
-            label="HORA DE TOMA"
-            type="time"
-            value={horaToma}
-            onChange={(e) => setHoraToma(e.target.value)}
-            size="small"
-            sx={{ width: 150 }}
-            InputLabelProps={{ shrink: true }}
-          />
+        <TextField
+          label="HORA DE TOMA"
+          type="time"
+          value={horaToma}
+          onChange={(e) => setHoraToma(e.target.value)}
+          size="small"
+          sx={{ 
+            width: 150,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
 
-          <TextField
-            label="FECHA DE TOMA"
-            type="date"
-            value={fechaToma}
-            onChange={(e) => setFechaToma(e.target.value)}
-            size="small"
-            sx={{ width: 180 }}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Box>
+        <TextField
+          label="FECHA DE TOMA"
+          type="date"
+          value={fechaToma}
+          onChange={(e) => setFechaToma(e.target.value)}
+          size="small"
+          sx={{ 
+            width: 180,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
       </Box>
 
       {/* Sección E: Diagnósticos */}
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
-          E. DIAGNÓSTICOS (CIE10)
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            color: "#1A3C6D",
+            mb: 1.5,
+            fontSize: "0.85rem",
+          }}
+        >
+           DIAGNÓSTICOS (CIE10)
         </Typography>
 
         <Box
@@ -437,7 +492,11 @@ const AnatomiaPatologica = () => {
                 {...params}
                 label="BUSCAR DIAGNÓSTICO"
                 size="small"
-                sx={{ minWidth: 400 }}
+                sx={{ 
+                  minWidth: 400,
+                  '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+                  '& .MuiInputBase-input': { fontSize: '0.7rem' },
+                }}
               />
             )}
           />
@@ -448,6 +507,7 @@ const AnatomiaPatologica = () => {
             sx={{
               background: "#1A3C6D",
               "&:hover": { background: "#274472" },
+              fontSize: '0.7rem',
             }}
           >
             AGREGAR PRE
@@ -459,6 +519,7 @@ const AnatomiaPatologica = () => {
             sx={{
               background: "#1A3C6D",
               "&:hover": { background: "#274472" },
+              fontSize: '0.7rem',
             }}
           >
             AGREGAR DEF
@@ -470,14 +531,14 @@ const AnatomiaPatologica = () => {
           <Table size="small">
             <TableHead>
               <TableRow sx={{ backgroundColor: "#e3eaf6" }}>
-                <TableCell sx={{ fontWeight: "bold", width: 60 }}>
+                <TableCell sx={{ fontWeight: "bold", width: 60, fontSize: "0.65rem" }}>
                   TIPO
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", width: 100 }}>
+                <TableCell sx={{ fontWeight: "bold", width: 100, fontSize: "0.65rem" }}>
                   CÓDIGO
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>DESCRIPCIÓN</TableCell>
-                <TableCell sx={{ fontWeight: "bold", width: 80 }}>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "0.65rem" }}>DESCRIPCIÓN</TableCell>
+                <TableCell sx={{ fontWeight: "bold", width: 80, fontSize: "0.65rem" }}>
                   ACCIÓN
                 </TableCell>
               </TableRow>
@@ -490,6 +551,7 @@ const AnatomiaPatologica = () => {
                       variant="body2"
                       sx={{
                         fontWeight: "bold",
+                        fontSize: "0.65rem",
                         color:
                           diagnostico.tipo === "PRE" ? "#ff9800" : "#4caf50",
                       }}
@@ -497,16 +559,17 @@ const AnatomiaPatologica = () => {
                       {diagnostico.tipo}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
+                  <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "0.65rem" }}>
                     {diagnostico.codigo}
                   </TableCell>
-                  <TableCell>{diagnostico.descripcion}</TableCell>
+                  <TableCell sx={{ fontSize: "0.65rem" }}>{diagnostico.descripcion}</TableCell>
                   <TableCell>
                     <IconButton
                       color="error"
                       onClick={() => eliminarDiagnostico(diagnostico.id)}
+                      size="small"
                     >
-                      <CloseIcon />
+                      <DeleteIcon sx={{ fontSize: "0.8rem" }} />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -518,15 +581,25 @@ const AnatomiaPatologica = () => {
 
       {/* Sección de Búsqueda y Selección de Exámenes */}
       <Box sx={{ mb: 3 }}>
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            color: "#1A3C6D",
+            mb: 1.5,
+            fontSize: "0.85rem",
+          }}
+        >
+           BÚSQUEDA DE EXÁMENES
+        </Typography>
         <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
-          <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+          <Typography variant="body1" sx={{ fontWeight: "bold", fontSize: "0.7rem" }}>
             BUSCAR POR:
           </Typography>
           <FormControl size="small" sx={{ minWidth: 120 }}>
-            <InputLabel>CRITERIO</InputLabel>
-            <Select value="codigo" label="CRITERIO">
-              <MenuItem value="codigo">CÓDIGO</MenuItem>
-              <MenuItem value="descripcion">DESCRIPCIÓN</MenuItem>
+            <InputLabel sx={{ fontSize: '0.7rem' }}>CRITERIO</InputLabel>
+            <Select value="codigo" label="CRITERIO" sx={{ '& .MuiSelect-select': { fontSize: '0.7rem' } }}>
+              <MenuItem value="codigo" sx={{ fontSize: '0.7rem' }}>CÓDIGO</MenuItem>
+              <MenuItem value="descripcion" sx={{ fontSize: '0.7rem' }}>DESCRIPCIÓN</MenuItem>
             </Select>
           </FormControl>
           <TextField
@@ -534,7 +607,12 @@ const AnatomiaPatologica = () => {
             value={criterio}
             onChange={(e) => setCriterio(e.target.value)}
             size="small"
-            sx={{ flex: 1, minWidth: 200 }}
+            sx={{ 
+              flex: 1, 
+              minWidth: 200,
+              '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+              '& .MuiInputBase-input': { fontSize: '0.7rem' },
+            }}
           />
           <Button
             variant="contained"
@@ -543,6 +621,7 @@ const AnatomiaPatologica = () => {
             sx={{
               background: "#1A3C6D",
               "&:hover": { background: "#274472" },
+              fontSize: '0.7rem',
             }}
           >
             BUSCAR
@@ -554,12 +633,12 @@ const AnatomiaPatologica = () => {
           <Table size="small">
             <TableHead>
               <TableRow sx={{ backgroundColor: "#e3eaf6" }}>
-                <TableCell sx={{ fontWeight: "bold", width: 50 }}>#</TableCell>
-                <TableCell sx={{ fontWeight: "bold", width: 100 }}>
+                <TableCell sx={{ fontWeight: "bold", width: 50, fontSize: "0.65rem" }}>#</TableCell>
+                <TableCell sx={{ fontWeight: "bold", width: 100, fontSize: "0.65rem" }}>
                   CÓDIGO
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>DESCRIPCIÓN</TableCell>
-                <TableCell sx={{ fontWeight: "bold", width: 100 }}>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "0.65rem" }}>DESCRIPCIÓN</TableCell>
+                <TableCell sx={{ fontWeight: "bold", width: 100, fontSize: "0.65rem" }}>
                   ACCIÓN
                 </TableCell>
               </TableRow>
@@ -567,11 +646,11 @@ const AnatomiaPatologica = () => {
             <TableBody>
               {examenesDisponibles.map((examen, index) => (
                 <TableRow key={examen.id} hover>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
+                  <TableCell sx={{ fontSize: "0.65rem" }}>{index + 1}</TableCell>
+                  <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "0.65rem" }}>
                     {examen.codigo}
                   </TableCell>
-                  <TableCell>{examen.descripcion}</TableCell>
+                  <TableCell sx={{ fontSize: "0.65rem" }}>{examen.descripcion}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
@@ -582,6 +661,7 @@ const AnatomiaPatologica = () => {
                           (e) => e.id === examen.id
                         ) !== undefined
                       }
+                      sx={{ fontSize: '0.65rem' }}
                     >
                       SELECCIONAR
                     </Button>
@@ -593,22 +673,29 @@ const AnatomiaPatologica = () => {
         </TableContainer>
 
         {/* Tabla de Exámenes Seleccionados */}
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            color: "#1A3C6D",
+            mb: 1.5,
+            fontSize: "0.85rem",
+          }}
+        >
           EXÁMENES SELECCIONADOS
         </Typography>
         <TableContainer component={Paper} sx={{ mb: 3, maxHeight: 300 }}>
           <Table size="small">
             <TableHead>
               <TableRow sx={{ backgroundColor: "#e3eaf6" }}>
-                <TableCell sx={{ fontWeight: "bold", width: 50 }}>#</TableCell>
-                <TableCell sx={{ fontWeight: "bold", width: 100 }}>
+                <TableCell sx={{ fontWeight: "bold", width: 50, fontSize: "0.65rem" }}>#</TableCell>
+                <TableCell sx={{ fontWeight: "bold", width: 100, fontSize: "0.65rem" }}>
                   CÓDIGO
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>DESCRIPCIÓN</TableCell>
-                <TableCell sx={{ fontWeight: "bold", width: 200 }}>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "0.65rem" }}>DESCRIPCIÓN</TableCell>
+                <TableCell sx={{ fontWeight: "bold", width: 200, fontSize: "0.65rem" }}>
                   COMENTARIO
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", width: 80 }}>
+                <TableCell sx={{ fontWeight: "bold", width: 80, fontSize: "0.65rem" }}>
                   ACCIÓN
                 </TableCell>
               </TableRow>
@@ -616,11 +703,11 @@ const AnatomiaPatologica = () => {
             <TableBody>
               {examenesSeleccionados.map((examen, index) => (
                 <TableRow key={examen.id} hover>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
+                  <TableCell sx={{ fontSize: "0.65rem" }}>{index + 1}</TableCell>
+                  <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "0.65rem" }}>
                     {examen.codigo}
                   </TableCell>
-                  <TableCell>{examen.descripcion}</TableCell>
+                  <TableCell sx={{ fontSize: "0.65rem" }}>{examen.descripcion}</TableCell>
                   <TableCell>
                     <TextField
                       value={examen.comentario || ""}
@@ -630,14 +717,18 @@ const AnatomiaPatologica = () => {
                       size="small"
                       fullWidth
                       placeholder="COMENTARIO OPCIONAL"
+                      sx={{
+                        '& .MuiInputBase-input': { fontSize: '0.65rem' },
+                      }}
                     />
                   </TableCell>
                   <TableCell>
                     <IconButton
                       color="error"
                       onClick={() => eliminarExamenSeleccionado(examen.id)}
+                      size="small"
                     >
-                      <CloseIcon />
+                      <DeleteIcon sx={{ fontSize: "0.8rem" }} />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -647,157 +738,227 @@ const AnatomiaPatologica = () => {
         </TableContainer>
       </Box>
 
-      {/* Sección I: Datos del Profesional Responsable */}
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
-          I. DATOS DEL PROFESIONAL RESPONSABLE
-        </Typography>
-
-        <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
-          <TextField
-            label="FECHA"
-            type="date"
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
-            size="small"
-            sx={{ width: 150 }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label="HORA"
-            type="time"
-            value={hora}
-            onChange={(e) => setHora(e.target.value)}
-            size="small"
-            sx={{ width: 150 }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label="CÉDULA MÉDICO"
-            value={cedulaMedico}
-            onChange={(e) => setCedulaMedico(e.target.value)}
-            size="small"
-            sx={{ width: 150 }}
-          />
-          <Button
-            variant="contained"
-            onClick={buscarMedico}
-            size="small"
-            sx={{
-              background: "#1A3C6D",
-              "&:hover": { background: "#274472" },
-            }}
-          >
-            BUSCAR
-          </Button>
-          <TextField
-            label="NOMBRE DEL MÉDICO"
-            value={nombreMedico}
-            disabled
-            size="small"
-            sx={{ flex: 1, minWidth: 200 }}
-          />
-        </Box>
-
-        <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
-          <TextField
-            label="FECHA DE RECEPCIÓN"
-            type="date"
-            value={fechaRecepcion}
-            onChange={(e) => setFechaRecepcion(e.target.value)}
-            size="small"
-            sx={{ width: 180 }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label="HORA DE RECEPCIÓN"
-            type="time"
-            value={horaRecepcion}
-            onChange={(e) => setHoraRecepcion(e.target.value)}
-            size="small"
-            sx={{ width: 150 }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label="CÓDIGO INTERNO DE LA MUESTRA"
-            value={codigoInterno}
-            disabled
-            size="small"
-            sx={{ width: 200 }}
-          />
-        </Box>
-
-        <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
-          <TextField
-            label="NOMBRE QUIEN ENTREGA LA MUESTRA"
-            value={nombreEntrega}
-            onChange={(e) => setNombreEntrega(e.target.value)}
-            size="small"
-            sx={{ flex: 1, minWidth: 250 }}
-          />
-          <TextField
-            label="NOMBRE QUIEN RECIBE LA MUESTRA"
-            value={nombreRecibe}
-            onChange={(e) => setNombreRecibe(e.target.value)}
-            size="small"
-            sx={{ flex: 1, minWidth: 250 }}
-          />
-        </Box>
+      {/* SECCIÓN DE DATOS DEL PROFESIONAL - SOLO LECTURA */}
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          color: "#1A3C6D",
+          mb: 1.5,
+          fontSize: "0.85rem",
+        }}
+      >
+        DATOS DEL PROFESIONAL RESPONSABLE
+      </Typography>
+      <Box sx={{ display: "flex", gap: 1.5, mb: 2.5, flexWrap: "wrap" }}>
+        <TextField
+          label="FECHA"
+          type="date"
+          value={fecha}
+          disabled // NO EDITABLE - INFORMACIÓN DEL USUARIO
+          size="small"
+          sx={{ 
+            width: 150,
+            backgroundColor: "#E0E0E0",
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label="HORA"
+          type="time"
+          value={hora}
+          disabled // NO EDITABLE - INFORMACIÓN DEL USUARIO
+          size="small"
+          sx={{ 
+            width: 150,
+            backgroundColor: "#E0E0E0",
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label="CÉDULA MÉDICO"
+          value={cedulaMedico}
+          disabled // NO EDITABLE - INFORMACIÓN DEL USUARIO LOGUEADO
+          size="small"
+          sx={{ 
+            width: 150,
+            backgroundColor: "#E0E0E0",
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+        <TextField
+          label="NOMBRE DEL MÉDICO"
+          value={nombreMedico}
+          disabled // NO EDITABLE - INFORMACIÓN DEL USUARIO LOGUEADO
+          size="small"
+          sx={{ 
+            flex: 1,
+            minWidth: 200,
+            backgroundColor: "#E0E0E0",
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
       </Box>
 
-      {/* Botones */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
+        <TextField
+          label="FECHA DE RECEPCIÓN"
+          type="date"
+          value={fechaRecepcion}
+          onChange={(e) => setFechaRecepcion(e.target.value)}
+          size="small"
+          sx={{ 
+            width: 180,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label="HORA DE RECEPCIÓN"
+          type="time"
+          value={horaRecepcion}
+          onChange={(e) => setHoraRecepcion(e.target.value)}
+          size="small"
+          sx={{ 
+            width: 150,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label="CÓDIGO INTERNO DE LA MUESTRA"
+          value={codigoInterno}
+          disabled
+          size="small"
+          sx={{ 
+            width: 200,
+            backgroundColor: "#E0E0E0",
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+      </Box>
+
+      <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
+        <TextField
+          label="NOMBRE QUIEN ENTREGA LA MUESTRA"
+          value={nombreEntrega}
+          onChange={(e) => setNombreEntrega(e.target.value)}
+          size="small"
+          sx={{ 
+            flex: 1, 
+            minWidth: 250,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+        <TextField
+          label="NOMBRE QUIEN RECIBE LA MUESTRA"
+          value={nombreRecibe}
+          onChange={(e) => setNombreRecibe(e.target.value)}
+          size="small"
+          sx={{ 
+            flex: 1, 
+            minWidth: 250,
+            '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+            '& .MuiInputBase-input': { fontSize: '0.7rem' },
+          }}
+        />
+      </Box>
+
+      {/* OPCIONES DE ACCIÓN CON RADIO BUTTONS - SOLO UNA SELECCIÓN */}
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          color: "#1A3C6D",
+          mb: 1.5,
+          fontSize: "0.85rem",
+        }}
+      >
+        OPCIONES DE ACCION
+      </Typography>
+      <Box sx={{ mb: 2.5 }}>
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            value={accionSeleccionada}
+            onChange={(e) => setAccionSeleccionada(e.target.value)}
+            sx={{ gap: 3 }}
+          >
+            <FormControlLabel 
+              value="guardar" 
+              control={<Radio size="small" />} 
+              label={
+                <Typography sx={{ fontSize: '0.7rem', fontWeight: 'bold' }}>
+                   GUARDAR
+                </Typography>
+              } 
+            />
+            <FormControlLabel 
+              value="exportar" 
+              control={<Radio size="small" />} 
+              label={
+                <Typography sx={{ fontSize: '0.7rem', fontWeight: 'bold' }}>
+                   EXPORTAR PDF
+                </Typography>
+              } 
+            />
+            <FormControlLabel 
+              value="imprimir" 
+              control={<Radio size="small" />} 
+              label={
+                <Typography sx={{ fontSize: '0.7rem', fontWeight: 'bold' }}>
+                  IMPRIMIR
+                </Typography>
+              } 
+            />
+            <FormControlLabel 
+              value="editar" 
+              control={<Radio size="small" />} 
+              label={
+                <Typography sx={{ fontSize: '0.7rem', fontWeight: 'bold' }}>
+                   EDITAR
+                </Typography>
+              } 
+            />
+            <FormControlLabel 
+              value="eliminar" 
+              control={<Radio size="small" />} 
+              label={
+                <Typography sx={{ fontSize: '0.7rem', fontWeight: 'bold' }}>
+                  ELIMINAR
+                </Typography>
+              } 
+            />
+          </RadioGroup>
+        </FormControl>
+      </Box>
+
+      {/* BOTÓN EJECUTAR ACCIÓN */}
+      <Box sx={{ mb: 2.5 }}>
         <Button
           variant="contained"
-          startIcon={<ExportIcon />}
+          onClick={handleAccion}
+          disabled={!accionSeleccionada}
           sx={{
             background: "#1A3C6D",
+            borderRadius: 2,
+            px: 3,
+            textTransform: "none",
+            fontWeight: "bold",
+            fontSize: '0.7rem',
             "&:hover": { background: "#274472" },
+            "&:disabled": { background: "#ccc" },
           }}
         >
-          EXPORTAR PDF
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<PrintIcon />}
-          sx={{
-            background: "#1A3C6D",
-            "&:hover": { background: "#274472" },
-          }}
-        >
-          IMPRIMIR
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<SaveIcon />}
-          onClick={handleGuardar}
-          sx={{
-            background: "#1A3C6D",
-            "&:hover": { background: "#274472" },
-          }}
-        >
-          GUARDAR
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<EditIcon />}
-          sx={{
-            background: "#1A3C6D",
-            "&:hover": { background: "#274472" },
-          }}
-        >
-          EDITAR
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<DeleteIcon />}
-          onClick={handleEliminar}
-          sx={{
-            background: "#1A3C6D",
-            "&:hover": { background: "#274472" },
-          }}
-        >
-          ELIMINAR
+          EJECUTAR ACCIÓN SELECCIONADA
         </Button>
       </Box>
 
@@ -808,9 +969,9 @@ const AnatomiaPatologica = () => {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>CONFIRMAR ELIMINACIÓN</DialogTitle>
+        <DialogTitle sx={{ fontSize: "0.85rem" }}>CONFIRMAR ELIMINACIÓN</DialogTitle>
         <DialogContent>
-          <Typography sx={{ mb: 2 }}>
+          <Typography sx={{ mb: 2, fontSize: "0.7rem" }}>
             ¿ESTÁ SEGURO DE ELIMINAR ESTA ORDEN? ESTA ACCIÓN NO SE PUEDE
             DESHACER.
           </Typography>
@@ -822,10 +983,18 @@ const AnatomiaPatologica = () => {
             rows={3}
             fullWidth
             required
+            sx={{
+              '& .MuiInputLabel-root': { fontSize: '0.7rem' },
+              '& .MuiInputBase-input': { fontSize: '0.7rem' },
+            }}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDeleteDialog(false)} color="secondary">
+          <Button 
+            onClick={() => setOpenDeleteDialog(false)} 
+            color="secondary"
+            sx={{ fontSize: '0.7rem' }}
+          >
             CANCELAR
           </Button>
           <Button
@@ -833,6 +1002,7 @@ const AnatomiaPatologica = () => {
             color="error"
             variant="contained"
             disabled={!motivoEliminacion.trim()}
+            sx={{ fontSize: '0.7rem' }}
           >
             ELIMINAR
           </Button>

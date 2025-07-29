@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -11,7 +12,6 @@ import {
   InputAdornment,
   Avatar,
   Paper,
-  Grid,
   Button,
   Dialog,
   DialogTitle,
@@ -32,7 +32,6 @@ import {
   Verified as SelloIcon,
   Search as BuscarIcon,
   AccountCircle as MedicoIcon,
-  Save as SaveIcon,
   Timer as TiempoIcon,
 } from "@mui/icons-material";
 
@@ -62,7 +61,7 @@ interface MedicoBD {
   sello: string;
 }
 
-export default function ProfesionalResponsable() {
+export default function ProfesionalResponsableI() {
   const [profesionalData, setProfesionalData] = useState<ProfesionalData>({
     fecha: '',
     hora: '',

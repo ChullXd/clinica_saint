@@ -37,7 +37,7 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
           py: 2,
         }}
       >
-        Órdenes de Exámenes
+        ORDENES DE EXAMENES
       </DialogTitle>
       <DialogContent
         sx={{
@@ -52,7 +52,7 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
           <Tabs
             value={value}
             onChange={handleChange}
-            aria-label="ordenes examenes tabs"
+            aria-label="ORDENES EXAMENES TABS"
             sx={{
               "& .MuiTab-root": {
                 fontWeight: 800,
@@ -65,9 +65,9 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
               },
             }}
           >
-            <Tab label="Laboratorio" />
-            <Tab label="Imagenología" />
-            <Tab label="Anatomía Patológica" />
+            <Tab label=" LABORATORIO" />
+            <Tab label=" IMAGENOLOGIA" />
+            <Tab label=" ANATOMIA PATOLOGICA" />
           </Tabs>
         </Box>
         <Box sx={{ minHeight: "400px" }}>
@@ -89,7 +89,7 @@ const OrdenesExamenesForm: React.FC<OrdenesProps> = ({ open, onClose }) => {
             "&:hover": { background: "#c62828" },
           }}
         >
-          Cerrar
+          CERRAR
         </Button>
       </DialogActions>
     </Dialog>

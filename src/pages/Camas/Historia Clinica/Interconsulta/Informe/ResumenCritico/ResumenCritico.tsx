@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Card,
@@ -6,71 +6,46 @@ import {
   Typography,
   TextField,
   Chip,
-  Divider,
-  Alert,
-  InputAdornment,
 } from '@mui/material';
 import {
-  Assignment as CuadroIcon,
+  Psychology as CriterioIcon,
   Edit as EditIcon,
   Save as SaveIcon,
   Timer as TiempoIcon,
-  MedicalServices as ClinicoIcon,
 } from "@mui/icons-material";
 
-interface CuadroClinicoData {
+interface ResumenCritericoData {
   descripcion: string;
   fechaCreacion: string;
   ultimaModificacion: string;
 }
 
-export default function CuadroClinico() {
-  const [cuadroClinico, setCuadroClinico] = useState<CuadroClinicoData>({
+export default function ResumenCritico() {
+  const [resumenCriterio, setResumenCriterio] = useState<ResumenCritericoData>({
     descripcion: '',
     fechaCreacion: '',
     ultimaModificacion: '',
   });
 
+
   const handleDescripcionChange = (value: string) => {
     const now = new Date().toISOString();
-    setCuadroClinico(prev => ({
+    setResumenCriterio(prev => ({
       ...prev,
       descripcion: value.toUpperCase(),
       fechaCreacion: prev.fechaCreacion || now,
       ultimaModificacion: now,
     }));
   };
-
   // Contar caracteres y palabras
-  const caracteresCount = cuadroClinico.descripcion.length;
-  const palabrasCount = cuadroClinico.descripcion.trim() ? 
-    cuadroClinico.descripcion.trim().split(/\s+/).length : 0;
+  const caracteresCount = resumenCriterio.descripcion.length;
+  const palabrasCount = resumenCriterio.descripcion.trim() ? 
+    resumenCriterio.descripcion.trim().split(/\s+/).length : 0;
 
-  // Sugerencias de cuadro clínico común
-  const sugerenciasCuadroClinico = [
-    "PACIENTE EN CONDICIONES GENERALES ESTABLES",
-    "CONSCIENTE, ORIENTADO EN TIEMPO, ESPACIO Y PERSONA",
-    "AFEBRIL, HIDRATADO, NORMOCOLOREADO",
-    "SIGNOS VITALES DENTRO DE PARÁMETROS NORMALES",
-    "DOLOR ABDOMINAL EN REGIÓN EPIGÁSTRICA",
-    "NÁUSEAS Y VÓMITOS DE CONTENIDO ALIMENTARIO",
-    "DIFICULTAD RESPIRATORIA LEVE A MODERADA",
-    "EDEMA EN MIEMBROS INFERIORES ++",
-    "LESIONES DÉRMICAS EN REGIÓN DORSAL",
-    "ALTERACIÓN DEL ESTADO DE CONCIENCIA"
-  ];
-
-  const agregarSugerencia = (sugerencia: string) => {
-    const textoActual = cuadroClinico.descripcion;
-    const nuevoTexto = textoActual ? 
-      `${textoActual}\n• ${sugerencia}` : 
-      `• ${sugerencia}`;
-    handleDescripcionChange(nuevoTexto);
-  };
 
   return (
     <Box>
-      {/* Sección C: Cuadro Clínico Actual */}
+      {/* Sección C: Resumen del Criterio Clínico */}
       <Card sx={{ mb: 3 }}>
         <CardContent sx={{ p: 2 }}>
           <Typography
@@ -79,14 +54,14 @@ export default function CuadroClinico() {
               mb: 1.5,
               fontWeight: "bold",
               color: "#1A3C6D",
-              fontSize: "0.9rem", // Tamaño optimizado
+              fontSize: "0.9rem",
               display: 'flex',
               alignItems: 'center',
               gap: 1
             }}
           >
-            <CuadroIcon sx={{ fontSize: '1rem' }} />
-            C. CUADRO CLÍNICO ACTUAL
+            <CriterioIcon sx={{ fontSize: '1rem' }} />
+            C. RESUMEN DEL CRITERIO CLÍNICO
           </Typography>
 
           {/* Campo de texto libre */}
@@ -94,9 +69,9 @@ export default function CuadroClinico() {
             <TextField
               fullWidth
               multiline
-              rows={12}
-              placeholder="DESCRIBIR EL CUADRO CLÍNICO ACTUAL DEL PACIENTE..."
-              value={cuadroClinico.descripcion}
+              rows={15}
+              placeholder="DESCRIBIR EL CRITERIO CLÍNICO Y ANÁLISIS DEL CASO..."
+              value={resumenCriterio.descripcion}
               onChange={(e) => handleDescripcionChange(e.target.value)}
               InputProps={{
                 startAdornment: (
@@ -115,7 +90,7 @@ export default function CuadroClinico() {
               }}
               sx={{ 
                 '& .MuiInputBase-input': { 
-                  fontSize: '0.8rem', // Tamaño optimizado
+                  fontSize: '0.8rem',
                   lineHeight: 1.5,
                   fontFamily: 'monospace',
                   pt: 4,
@@ -133,33 +108,34 @@ export default function CuadroClinico() {
               label={`${caracteresCount} caracteres`}
               size="small"
               color={caracteresCount > 0 ? "primary" : "default"}
-              sx={{ fontSize: '0.65rem' }} // Tamaño optimizado
+              sx={{ fontSize: '0.65rem' }}
             />
             <Chip
               label={`${palabrasCount} palabras`}
               size="small"
               color={palabrasCount > 0 ? "primary" : "default"}
-              sx={{ fontSize: '0.65rem' }} // Tamaño optimizado
+              sx={{ fontSize: '0.65rem' }}
             />
-            {cuadroClinico.fechaCreacion && (
+            {resumenCriterio.fechaCreacion && (
               <Chip
                 icon={<TiempoIcon sx={{ fontSize: '0.7rem' }} />}
-                label={`Creado: ${new Date(cuadroClinico.fechaCreacion).toLocaleString()}`}
+                label={`Creado: ${new Date(resumenCriterio.fechaCreacion).toLocaleString()}`}
                 size="small"
                 color="success"
-                sx={{ fontSize: '0.65rem' }} // Tamaño optimizado
+                sx={{ fontSize: '0.65rem' }}
               />
             )}
-            {cuadroClinico.ultimaModificacion && cuadroClinico.ultimaModificacion !== cuadroClinico.fechaCreacion && (
+            {resumenCriterio.ultimaModificacion && resumenCriterio.ultimaModificacion !== resumenCriterio.fechaCreacion && (
               <Chip
                 icon={<SaveIcon sx={{ fontSize: '0.7rem' }} />}
-                label={`Modificado: ${new Date(cuadroClinico.ultimaModificacion).toLocaleString()}`}
+                label={`Modificado: ${new Date(resumenCriterio.ultimaModificacion).toLocaleString()}`}
                 size="small"
                 color="warning"
-                sx={{ fontSize: '0.65rem' }} // Tamaño optimizado
+                sx={{ fontSize: '0.65rem' }}
               />
             )}
           </Box>
+         
         </CardContent>
       </Card>
     </Box>

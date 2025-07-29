@@ -11,6 +11,7 @@ import CuadroClinico from "./CuadroClinico/CuadroClinico";
 import ExamenesProcedimientos from "./ExamenesProcedimientos/ExamenesProcedimientos";
 import PlanTerapeutico from "./PlanTerapeutico/PlanTerapeutico";
 import ProfesionalResponsable from "./ProfesionalResponsable/ProfesionalResponsable";
+import Diagnostico from "./Diagnostico/Diagnostico";
 
 
 // Importar los componentes de formularios existentes
@@ -35,7 +36,7 @@ function TabPanel(props: TabPanelProps) {
             aria-labelledby={`protocolo-tab-${index}`}
             {...other}
         >
-            {value === index && <Box sx={{ pt: 3 }}>{children}</Box>}
+            {value === index && <Box sx={{ pt: 1 }}>{children}</Box>}
         </div>
     );
 }
@@ -50,32 +51,31 @@ export default function Solicitud() {
 
 
     return (
-        <Paper elevation={3} sx={{ p: 2, m: 2 }}>
-          
+        <Paper elevation={1} sx={{ p: 2, m: 2 }}>
 
             <TabPanel value={tabValue} index={0}>
                 <EstablecimientoPaciente />
             </TabPanel>
-              <TabPanel value={tabValue} index={0}>
+            <TabPanel value={tabValue} index={0}>
                 <Caracteristicas />
             </TabPanel>
-              <TabPanel value={tabValue} index={0}>
+            <TabPanel value={tabValue} index={0}>
                 <CuadroClinico />
             </TabPanel>
-              <TabPanel value={tabValue} index={0}>
+            <TabPanel value={tabValue} index={0}>
                 <ExamenesProcedimientos />
             </TabPanel>
-              <TabPanel value={tabValue} index={0}>
+            <TabPanel value={tabValue} index={0}>
+                <Diagnostico />
+            </TabPanel>
+            <TabPanel value={tabValue} index={0}>
                 <PlanTerapeutico />
             </TabPanel>
-             <TabPanel value={tabValue} index={0}>
+            <TabPanel value={tabValue} index={0}>
                 <ProfesionalResponsable />
             </TabPanel>
-           
 
 
-
-           
         </Paper>
     );
 }
