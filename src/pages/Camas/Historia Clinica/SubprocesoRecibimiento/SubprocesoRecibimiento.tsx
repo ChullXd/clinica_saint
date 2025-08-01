@@ -91,7 +91,7 @@ export default function SubprocesoRecibimiento() {
                                 textAlign: "center",
                             }}
                         >
-                            FORMULARIO 060 MSP CIRUGÍA SEGURA
+                            Formulario 016 A-B MSP RECIEN NACIDO
                         </Typography>
                     </Box>
                 </CardContent>

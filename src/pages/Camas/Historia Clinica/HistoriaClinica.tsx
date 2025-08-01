@@ -91,7 +91,7 @@ interface OrdenesProps {
             <Tab label="PROTOCOLO ANESTESIÓLOGO" />
             <Tab label="CONSENTIMIENTO INFORMADO" />
             <Tab label="CIRUGIA SEGURA" />
-            <Tab label="SUBPROCESO DE RECIBIMIENTO" />
+            <Tab label="RECIEN NACIDO" />
             <Tab label="INTERCONSULTA" />
             <Tab label="EPICRISIS" />
             <Tab label="TRANSFERENCIA" />
